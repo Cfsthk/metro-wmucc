@@ -184,10 +184,6 @@
   }
   .checkin-summary { text-align: center; margin-bottom: 16px; font-size: 0.82rem; color: var(--muted); font-weight: 500; }
 
-  /* ── Map ── */
-  .map { margin-top: 16px; border: 1px solid var(--subtle); border-radius: var(--radius); overflow: hidden; aspect-ratio: 16/9; }
-  .map iframe { width:100%; height:100%; border:0; }
-
   /* ── Empty state ── */
   .empty { text-align: center; padding: 48px 20px; color: var(--muted); }
   .empty .icon { font-size: 2.4rem; margin-bottom: 10px; }
@@ -254,7 +250,7 @@ const GAMES = [
 ];
 
 const EVENTS = [
-  { date:"2026-06-27", icon:"⚽", title:"Team Warm-up",           time:"14:00 – 16:00", desc:"Riverside Sports Complex · Grass pitch. Pre-tournament session.", lat:52.9405, lng:-1.1710 },
+  { date:"2026-06-27", icon:"⚽", title:"Team Warm-up",           time:"14:00 – 16:00", desc:"Riverside Sports Complex · Grass pitch · <a href=\"https://maps.app.goo.gl/HiDLaBCw5GbCDRSQA\" target=\"_blank\" style=\"color:var(--accent);font-weight:600;\">Map →</a>" },
   { date:"2026-06-27", icon:"🎉", title:"Opening Ceremony",     time:"TBC", desc:"Tournament kick-off at Highfields. Team parade and welcome." },
   { date:"2026-07-01", icon:"🤝", title:"Trade Night",          time:"Evening", desc:"Swap kit & swag with players from around the world." },
   { date:"2026-07-03", icon:"🎧", title:"WMUCC Official Party",  time:"21:30 – 02:00", desc:"Tournament Village. Live music + DJ Bradley James + DJ Tom Styles. Bring ID & accreditation." },
@@ -266,13 +262,19 @@ const END   = new Date("2026-07-04");
 const DAYS  = Math.floor((END - START) / 86400000);
 const TODAY = new Date();
 
-// ponytail: Google Maps coords for Nottingham venues
-const FIELD_COORDS = {
-  H08: { lat:52.9378, lng:-1.2085 }, H09: { lat:52.9375, lng:-1.2079 },
-  H13: { lat:52.9373, lng:-1.2073 }, R24: { lat:52.9405, lng:-1.1710 },
+// ponytail: venue map links from goo.gl short URLs
+const MAP_HIGHFIELDS = 'https://maps.app.goo.gl/x3QH2vKikJhFUqaN6';
+const MAP_RIVERSIDE  = 'https://maps.app.goo.gl/HiDLaBCw5GbCDRSQA';
+
+// Which venue each field belongs to
+const FIELD_VENUE = {
+  H08: 'highfields', H09: 'highfields', H13: 'highfields',
+  R24: 'riverside',
 };
-const VENUE_HIGHFIELDS = { lat:52.9378, lng:-1.2085 };
-const VENUE_RIVERSIDE  = { lat:52.9405, lng:-1.1710 };
+
+function fieldLink(field) {
+  return FIELD_VENUE[field] === 'riverside' ? MAP_RIVERSIDE : MAP_HIGHFIELDS;
+}
 
 // ═══════════════════════════════════════════
 //  HELPERS
@@ -286,14 +288,6 @@ function defaultIdx() {
   const t = new Date(TODAY); t.setHours(0,0,0,0);
   if (t < START) return 0; if (t > END) return DAYS;
   return Math.floor((t - START) / 86400000);
-}
-function osmLink(field) {
-  const c = FIELD_COORDS[field] || VENUE_HIGHFIELDS;
-  return `https://www.google.com/maps/search/?api=1&query=${c.lat},${c.lng}`;
-}
-function mapEmbed(field) {
-  const c = FIELD_COORDS[field] || VENUE_HIGHFIELDS;
-  return `https://maps.google.com/maps?q=${c.lat},${c.lng}&z=17&output=embed`;
 }
 
 // ═══════════════════════════════════════════
@@ -380,7 +374,7 @@ function renderContent() {
   const isPast = d < new Date(TODAY.getFullYear(), TODAY.getMonth(), TODAY.getDate());
 
   let html = `<div class="day-label">${isToday ? '<em>Today</em> · ' : ''}${isPast ? 'Completed · ' : ''}${dayLabel(d)}</div>`;
-  html += `<h2>${activeIdx===0 ? 'Team Check-in' : dayLabel(d)}</h2>`;
+  html += `<h2>${activeIdx===0 ? 'Check-in @ Derby' : dayLabel(d)}</h2>`;
 
   // ── CHECK-IN (day 0) ──
   if (activeIdx === 0) {
@@ -409,7 +403,7 @@ function renderContent() {
     html += `<div class="team"><div class="flag">${g.oppFlag}</div><div class="name">${g.opp}</div><div class="seed">Seed #${g.oppSeed}</div></div>`;
     html += `<div class="card-meta">`;
     html += `<span>${g.pool}</span>`;
-    html += `<span>Field <a href="${osmLink(g.field)}" target="_blank" onclick="event.stopPropagation()">${g.field} →</a></span>`;
+    html += `<span>Field <a href="${fieldLink(g.field)}" target="_blank" onclick="event.stopPropagation()">${g.field} →</a></span>`;
     html += `</div>`;
     html += `<div class="stats-panel" id="stats-${g.date}-${g.opp.replace(/[^a-zA-Z0-9]/g,'')}">`;
     if (sb) {
@@ -438,15 +432,11 @@ function renderContent() {
     html += `</div></div>`;
   }
 
-  // ── Map ──
-  if (dayGames.length) {
-    const fields = [...new Set(dayGames.map(g=>g.field))];
-    html += `<div class="map"><iframe src="${mapEmbed(fields[0])}"></iframe></div>`;
-  } else {
-    const locEvent = dayEvents.find(e => e.lat);
-    if (locEvent) {
-      html += `<div class="map"><iframe src="https://maps.google.com/maps?q=${locEvent.lat},${locEvent.lng}&z=17&output=embed"></iframe></div>`;
-    }
+  // ── Venue image (all days except check-in) ──
+  if (activeIdx !== 0) {
+    html += `<div style="margin-top:16px;border:1px solid var(--subtle);border-radius:var(--radius);overflow:hidden;aspect-ratio:16/9;background:var(--card);display:flex;align-items:center;justify-content:center;">`;
+    html += `<img src="full.svg" alt="Venue map" style="width:100%;height:100%;object-fit:contain;padding:8px;">`;
+    html += `</div>`;
   }
 
   if (!dayGames.length && !dayEvents.length && activeIdx !== 0) {
