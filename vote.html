@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Metro · Captain Vote</title>
+<style>
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+  :root {
+    --bg:        #fafafa;
+    --card:      #ffffff;
+    --text:      #1a1a1a;
+    --muted:     #6b6b6b;
+    --subtle:    #e5e5e5;
+    --accent:    #cc2233;
+    --accent-dim:#fce4e6;
+    --green:     #1a8a4a;
+    --amber:     #d97706;
+    --radius:    10px;
+    --shadow:    0 1px 3px rgba(0,0,0,0.06);
+  }
+
+  html { font-size: 15px; -webkit-font-smoothing: antialiased; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.5;
+    min-height: 100vh; max-width: 500px; margin: 0 auto;
+  }
+
+  header {
+    padding: 24px 16px 12px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  header .dot { width: 11px; height: 11px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+  header h1 { font-size: 1.1rem; font-weight: 700; }
+  header span { color: var(--muted); font-size: 0.75rem; font-weight: 500; display: block; }
+
+  /* ── Tabs ── */
+  .tab-row {
+    display: flex; gap: 0; padding: 0 14px;
+    border-bottom: 1px solid var(--subtle);
+  }
+  .tab-row button {
+    flex: 1; font: inherit; font-size: 0.78rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.3px;
+    padding: 12px 8px; background: none; border: none;
+    border-bottom: 3px solid transparent;
+    color: var(--muted); cursor: pointer; transition: 0.15s;
+  }
+  .tab-row button.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  main { padding: 16px 14px 64px; }
+
+  /* ── Voter selector ── */
+  .voter-select {
+    margin-bottom: 14px;
+  }
+  .voter-select label { font-size: 0.72rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 4px; }
+  .voter-select select {
+    width: 100%; font: inherit; font-size: 0.9rem; font-weight: 600;
+    padding: 10px 12px; border: 1px solid var(--subtle);
+    border-radius: var(--radius); background: var(--card);
+    appearance: none; -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M6 8L1 3h10z' fill='%236b6b6b'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 12px center;
+  }
+
+  /* ── Player list ── */
+  .info-text { font-size: 0.78rem; color: var(--muted); margin-bottom: 10px; text-align: center; }
+  .info-text strong { color: var(--accent); }
+
+  .player-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 6px; margin-bottom: 16px;
+  }
+  .player-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 12px; background: var(--card);
+    border: 1px solid var(--subtle); border-radius: 9px;
+    cursor: pointer; user-select: none; transition: 0.12s;
+    font-size: 0.85rem; font-weight: 500;
+  }
+  .player-item:hover { border-color: #ccc; }
+  .player-item.selected { background: var(--accent-dim); border-color: var(--accent); }
+  .player-item.disabled { opacity: 0.4; pointer-events: none; }
+  .player-item .chk {
+    width: 20px; height: 20px; flex-shrink: 0;
+    border: 2px solid #ccc; border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    transition: 0.12s; font-size: 0.7rem; color: #fff;
+  }
+  .player-item.selected .chk { background: var(--accent); border-color: var(--accent); }
+  .player-item.selected .chk::after { content: '✓'; }
+
+  /* ── Submit ── */
+  .submit-btn {
+    width: 100%; font: inherit; font-size: 0.9rem; font-weight: 700;
+    padding: 12px; border: none; border-radius: var(--radius);
+    background: var(--accent); color: #fff; cursor: pointer;
+    transition: 0.15s;
+  }
+  .submit-btn:disabled { opacity: 0.35; pointer-events: none; }
+  .submit-btn:hover { opacity: 0.9; }
+
+  /* ── Results ── */
+  .results { margin-top: 16px; }
+  .results h3 { font-size: 0.85rem; font-weight: 700; margin-bottom: 8px; }
+  .result-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 14px; background: var(--card); border: 1px solid var(--subtle);
+    border-radius: 9px; margin-bottom: 6px;
+    font-size: 0.88rem; font-weight: 600;
+  }
+  .result-row .bar {
+    height: 6px; background: var(--accent-dim); border-radius: 3px;
+    margin-left: 12px; flex: 1; min-width: 40px; position: relative;
+    overflow: hidden;
+  }
+  .result-row .bar-fill {
+    height: 100%; background: var(--accent); border-radius: 3px;
+    transition: width 0.3s;
+  }
+  .result-row.winner { background: var(--accent-dim); border-color: var(--accent); }
+  .result-row.winner .bar-fill { background: var(--green); }
+  .result-row .count { font-weight: 800; font-size: 1rem; min-width: 24px; text-align: right; }
+
+  .tie-notice {
+    text-align: center; padding: 14px; margin-top: 10px;
+    background: #fef3c7; border: 1px solid #fcd34d; border-radius: var(--radius);
+    font-size: 0.82rem; font-weight: 600; color: #92400e;
+  }
+  .done-notice {
+    text-align: center; padding: 14px; margin-top: 10px;
+    background: #f0faf3; border: 1px solid #b7e4c7; border-radius: var(--radius);
+    font-size: 0.82rem; font-weight: 600; color: #166534;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="dot"></div>
+  <div>
+    <h1>Captain & Spirit Captain Vote</h1>
+    <span>Metro Hong Kong · WMUCC 2026</span>
+  </div>
+</header>
+
+<div class="tab-row">
+  <button id="tab-cap" class="active" onclick="switchTab('captain')">Captain</button>
+  <button id="tab-spirit" onclick="switchTab('spirit')">Spirit Captain</button>
+</div>
+
+<main id="main"></main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+// ═══════════════════════════════════════════
+//  SUPABASE
+// ═══════════════════════════════════════════
+
+const SB = supabase.createClient(
+  'https://ixmlpzipuigsdfzzxvld.supabase.co',
+  ['eyJhbG...VCJ9','eyJpc3...0NH0','WRb0EdH7GKK2TsZdJ32_eanMC_aGgDEPysr0hlNTWks'].join('.')
+);
+
+// ═══════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════
+
+const PLAYERS = [
+  "Ada","Chor","Christy","Chuck","D Lu","Dave Learn","DIP","Dustin",
+  "Emily","Esther","Eunice","Fran","Gio","Henry","JJ","Jess",
+  "J Wu","Kay","Kris","Larry","Maisy","Max","Richard","Salina"
+];
+
+const VOTERS = 7;       // ponytail: hardcoded — 7 people voting
+const CHOICES_R1 = 2;   // round 1: 2 choices
+const CHOICES_TB = 1;   // tiebreak: 1 choice
+
+let currentRole = 'captain';
+let currentRound = {};   // { captain: N, spirit: N } — current round number for each role
+let selectedPlayers = new Set();
+
+// ═══════════════════════════════════════════
+//  DATA FETCH
+// ═══════════════════════════════════════════
+
+async function getVotes(role, round) {
+  const { data } = await SB.from('votes')
+    .select('voter_name, voted_for')
+    .eq('role', role)
+    .eq('round', round);
+  return data || [];
+}
+
+async function getMaxRound(role) {
+  const { data } = await SB.from('votes')
+    .select('round')
+    .eq('role', role)
+    .order('round', { ascending: false })
+    .limit(1);
+  if (data && data.length) return Math.max(1, ...data.map(d => d.round));
+  return 1;
+}
+
+async function submitVote(voterName) {
+  const round = currentRound[currentRole];
+  const rows = [...selectedPlayers].map(p => ({
+    role: currentRole,
+    round: round,
+    voter_name: voterName,
+    voted_for: p
+  }));
+
+  const { error } = await SB.from('votes').insert(rows);
+  if (error) { alert('Submit failed: ' + error.message); return false; }
+  return true;
+}
+
+async function getUniqueVoterCount(role, round) {
+  const votes = await getVotes(role, round);
+  return new Set(votes.map(v => v.voter_name)).size;
+}
+
+function tallyVotes(votes) {
+  const counts = {};
+  for (const v of votes) {
+    counts[v.voted_for] = (counts[v.voted_for] || 0) + 1;
+  }
+  // Sort by count desc
+  return Object.entries(counts).sort((a, b) => b[1] - a[1]);
+}
+
+function findTies(tallied) {
+  if (!tallied.length) return [];
+  const top = tallied[0][1];
+  return tallied.filter(([, c]) => c === top).map(([n]) => n);
+}
+
+// ═══════════════════════════════════════════
+//  RENDER
+// ═══════════════════════════════════════════
+
+async function render() {
+  const role = currentRole;
+  const round = currentRound[role];
+  const votes = await getVotes(role, round);
+  const voterCount = new Set(votes.map(v => v.voter_name)).size;
+  const isDone = voterCount >= VOTERS;
+  const maxChoices = round === 1 ? CHOICES_R1 : CHOICES_TB;
+
+  document.getElementById('tab-cap').className = role === 'captain' ? 'active' : '';
+  document.getElementById('tab-spirit').className = role === 'spirit' ? 'active' : '';
+
+  let html = '';
+
+  if (isDone) {
+    // ── Show results ──
+    const tallied = tallyVotes(votes);
+    const tied = findTies(tallied);
+    const hasWinner = tied.length === 1;
+    const maxVotes = tallied[0]?.[1] || 0;
+
+    html += `<div class="results">`;
+    html += `<h3>${role === 'captain' ? '🏅 Captain' : '🕊 Spirit Captain'} — Round ${round} Results</h3>`;
+
+    for (const [name, count] of tallied) {
+      const pct = maxVotes ? Math.round((count / maxVotes) * 100) : 0;
+      const isWinner = hasWinner && count === maxVotes;
+      html += `<div class="result-row${isWinner ? ' winner' : ''}">`;
+      html += `<span>${name}</span>`;
+      html += `<div class="bar"><div class="bar-fill" style="width:${pct}%"></div></div>`;
+      html += `<span class="count">${count}</span>`;
+      html += `</div>`;
+    }
+    html += `</div>`;
+
+    if (hasWinner) {
+      html += `<div class="done-notice">✅ ${tied[0]} is ${role === 'captain' ? 'Captain' : 'Spirit Captain'}!</div>`;
+    } else {
+      // Tied — need another round
+      html += `<div class="tie-notice">⚡ Tie between ${tied.join(', ')}!<br>New round — ${CHOICES_TB} choice each.</div>`;
+
+      // Show voting UI for tiebreak
+      const tbPlayers = tied;
+      html += `<div class="info-text">Select <strong>${CHOICES_TB}</strong> player</div>`;
+      html += `<div class="player-grid">`;
+      for (const p of tbPlayers) {
+        html += `<div class="player-item" data-player="${p}" onclick="togglePlayer(this, ${maxChoices})">`;
+        html += `<div class="chk"></div>${p}</div>`;
+      }
+      html += `</div>`;
+      html += renderVoterSelect();
+      html += `<button class="submit-btn" disabled id="submitBtn" onclick="handleSubmit()">Submit Vote</button>`;
+    }
+  } else {
+    // ── Voting UI ──
+    html += `<div class="info-text">Select <strong>${maxChoices}</strong> player${maxChoices>1?'s':''} · <strong>${VOTERS - voterCount}</strong> vote${VOTERS - voterCount !== 1 ? 's' : ''} remaining</div>`;
+    html += `<div class="player-grid">`;
+    for (const p of PLAYERS) {
+      html += `<div class="player-item" data-player="${p}" onclick="togglePlayer(this, ${maxChoices})">`;
+      html += `<div class="chk"></div>${p}</div>`;
+    }
+    html += `</div>`;
+    html += renderVoterSelect();
+    html += `<button class="submit-btn" disabled id="submitBtn" onclick="handleSubmit()">Submit Vote</button>`;
+  }
+
+  document.getElementById('main').innerHTML = html;
+}
+
+function renderVoterSelect() {
+  return `<div class="voter-select">
+    <label>Your name</label>
+    <select id="voterName">
+      <option value="">— Select —</option>
+      ${PLAYERS.map(p => `<option value="${p}">${p}</option>`).join('')}
+    </select>
+  </div>`;
+}
+
+// ═══════════════════════════════════════════
+//  INTERACTION
+// ═══════════════════════════════════════════
+
+window.switchTab = function(role) {
+  currentRole = role;
+  selectedPlayers.clear();
+  render();
+};
+
+window.togglePlayer = function(el, max) {
+  const name = el.dataset.player;
+  if (selectedPlayers.has(name)) {
+    selectedPlayers.delete(name);
+    el.classList.remove('selected');
+  } else {
+    if (selectedPlayers.size >= max) {
+      // Remove oldest selection
+      const first = [...selectedPlayers][0];
+      selectedPlayers.delete(first);
+      document.querySelector(`.player-item[data-player="${first}"]`)?.classList.remove('selected');
+    }
+    selectedPlayers.add(name);
+    el.classList.add('selected');
+  }
+
+  const submitBtn = document.getElementById('submitBtn');
+  const voterSel = document.getElementById('voterName');
+  if (submitBtn) {
+    submitBtn.disabled = selectedPlayers.size !== max || !voterSel?.value;
+  }
+};
+
+// Update submit button when voter selected
+document.addEventListener('change', function(e) {
+  if (e.target.id === 'voterName') {
+    const submitBtn = document.getElementById('submitBtn');
+    const max = currentRound[currentRole] === 1 ? CHOICES_R1 : CHOICES_TB;
+    if (submitBtn) submitBtn.disabled = selectedPlayers.size !== max || !e.target.value;
+  }
+});
+
+window.handleSubmit = async function() {
+  const voterName = document.getElementById('voterName').value;
+  if (!voterName) return;
+
+  // Check if this voter already voted this round
+  const existing = await getVotes(currentRole, currentRound[currentRole]);
+  if (existing.some(v => v.voter_name === voterName)) {
+    alert('You already voted in this round!');
+    return;
+  }
+
+  const ok = await submitVote(voterName);
+  if (!ok) return;
+
+  const voterCount = await getUniqueVoterCount(currentRole, currentRound[currentRole]);
+  selectedPlayers.clear();
+
+  if (voterCount >= VOTERS) {
+    // Check for tie
+    const votes = await getVotes(currentRole, currentRound[currentRole]);
+    const tallied = tallyVotes(votes);
+    const tied = findTies(tallied);
+
+    if (tied.length > 1) {
+      // Start new round
+      currentRound[currentRole]++;
+    }
+  }
+
+  render();
+};
+
+// ═══════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════
+
+(async function init() {
+  currentRound = {
+    captain: await getMaxRound('captain'),
+    spirit: await getMaxRound('spirit')
+  };
+  render();
+})();
+</script>
+</body>
+</html>
