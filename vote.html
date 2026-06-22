@@ -53,20 +53,6 @@
 
   main { padding: 16px 14px 64px; }
 
-  /* ── Voter selector ── */
-  .voter-select {
-    margin-bottom: 14px;
-  }
-  .voter-select label { font-size: 0.72rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 4px; }
-  .voter-select select {
-    width: 100%; font: inherit; font-size: 0.9rem; font-weight: 600;
-    padding: 10px 12px; border: 1px solid var(--subtle);
-    border-radius: var(--radius); background: var(--card);
-    appearance: none; -webkit-appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M6 8L1 3h10z' fill='%236b6b6b'/%3E%3C/svg%3E");
-    background-repeat: no-repeat; background-position: right 12px center;
-  }
-
   /* ── Player list ── */
   .info-text { font-size: 0.78rem; color: var(--muted); margin-bottom: 10px; text-align: center; }
   .info-text strong { color: var(--accent); }
@@ -173,7 +159,7 @@ const SB = supabase.createClient(
 const PLAYERS = [
   "Ada","Chor","Christy","Chuck","D Lu","Dave Learn","DIP","Dustin",
   "Emily","Esther","Eunice","Fran","Gio","Henry","JJ","Jess",
-  "J Wu","Kay","Kris","Larry","Maisy","Max","Richard","Salina"
+  "J Wu","Kris","Larry","Maisy","Max","Richard","Salina"
 ];
 
 const VOTERS = 7;       // ponytail: hardcoded — 7 people voting
@@ -206,12 +192,12 @@ async function getMaxRound(role) {
   return 1;
 }
 
-async function submitVote(voterName) {
+async function submitVote() {
   const round = currentRound[currentRole];
   const rows = [...selectedPlayers].map(p => ({
     role: currentRole,
     round: round,
-    voter_name: voterName,
+    voter_name: 'anon',
     voted_for: p
   }));
 
@@ -220,9 +206,14 @@ async function submitVote(voterName) {
   return true;
 }
 
-async function getUniqueVoterCount(role, round) {
-  const votes = await getVotes(role, round);
-  return new Set(votes.map(v => v.voter_name)).size;
+async function getSubmissionCount(role, round) {
+  const maxChoices = round === 1 ? CHOICES_R1 : CHOICES_TB;
+  const { count, error } = await SB.from('votes')
+    .select('*', { count: 'exact', head: true })
+    .eq('role', role)
+    .eq('round', round);
+  if (error || count === null) return 0;
+  return Math.floor(count / maxChoices);
 }
 
 function tallyVotes(votes) {
@@ -248,7 +239,7 @@ async function render() {
   const role = currentRole;
   const round = currentRound[role];
   const votes = await getVotes(role, round);
-  const voterCount = new Set(votes.map(v => v.voter_name)).size;
+  const voterCount = await getSubmissionCount(role, round);
   const isDone = voterCount >= VOTERS;
   const maxChoices = round === 1 ? CHOICES_R1 : CHOICES_TB;
 
@@ -293,7 +284,6 @@ async function render() {
         html += `<div class="chk"></div>${p}</div>`;
       }
       html += `</div>`;
-      html += renderVoterSelect();
       html += `<button class="submit-btn" disabled id="submitBtn" onclick="handleSubmit()">Submit Vote</button>`;
     }
   } else {
@@ -305,21 +295,10 @@ async function render() {
       html += `<div class="chk"></div>${p}</div>`;
     }
     html += `</div>`;
-    html += renderVoterSelect();
     html += `<button class="submit-btn" disabled id="submitBtn" onclick="handleSubmit()">Submit Vote</button>`;
   }
 
   document.getElementById('main').innerHTML = html;
-}
-
-function renderVoterSelect() {
-  return `<div class="voter-select">
-    <label>Your name</label>
-    <select id="voterName">
-      <option value="">— Select —</option>
-      ${PLAYERS.map(p => `<option value="${p}">${p}</option>`).join('')}
-    </select>
-  </div>`;
 }
 
 // ═══════════════════════════════════════════
@@ -332,6 +311,7 @@ window.switchTab = function(role) {
   render();
 };
 
+// Update submit button when selections change — check on click
 window.togglePlayer = function(el, max) {
   const name = el.dataset.player;
   if (selectedPlayers.has(name)) {
@@ -339,7 +319,6 @@ window.togglePlayer = function(el, max) {
     el.classList.remove('selected');
   } else {
     if (selectedPlayers.size >= max) {
-      // Remove oldest selection
       const first = [...selectedPlayers][0];
       selectedPlayers.delete(first);
       document.querySelector(`.player-item[data-player="${first}"]`)?.classList.remove('selected');
@@ -347,50 +326,22 @@ window.togglePlayer = function(el, max) {
     selectedPlayers.add(name);
     el.classList.add('selected');
   }
-
   const submitBtn = document.getElementById('submitBtn');
-  const voterSel = document.getElementById('voterName');
-  if (submitBtn) {
-    submitBtn.disabled = selectedPlayers.size !== max || !voterSel?.value;
-  }
+  if (submitBtn) submitBtn.disabled = selectedPlayers.size !== max;
 };
 
-// Update submit button when voter selected
-document.addEventListener('change', function(e) {
-  if (e.target.id === 'voterName') {
-    const submitBtn = document.getElementById('submitBtn');
-    const max = currentRound[currentRole] === 1 ? CHOICES_R1 : CHOICES_TB;
-    if (submitBtn) submitBtn.disabled = selectedPlayers.size !== max || !e.target.value;
-  }
-});
-
 window.handleSubmit = async function() {
-  const voterName = document.getElementById('voterName').value;
-  if (!voterName) return;
-
-  // Check if this voter already voted this round
-  const existing = await getVotes(currentRole, currentRound[currentRole]);
-  if (existing.some(v => v.voter_name === voterName)) {
-    alert('You already voted in this round!');
-    return;
-  }
-
-  const ok = await submitVote(voterName);
+  const ok = await submitVote();
   if (!ok) return;
 
-  const voterCount = await getUniqueVoterCount(currentRole, currentRound[currentRole]);
+  const voterCount = await getSubmissionCount(currentRole, currentRound[currentRole]);
   selectedPlayers.clear();
 
   if (voterCount >= VOTERS) {
-    // Check for tie
     const votes = await getVotes(currentRole, currentRound[currentRole]);
     const tallied = tallyVotes(votes);
     const tied = findTies(tallied);
-
-    if (tied.length > 1) {
-      // Start new round
-      currentRound[currentRole]++;
-    }
+    if (tied.length > 1) currentRound[currentRole]++;
   }
 
   render();
