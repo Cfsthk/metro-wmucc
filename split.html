@@ -173,16 +173,16 @@ let currentTab = 'add';
 let selectedSplitters = new Set();
 
 // ── Data ──
-async function addExpense(paidBy, amount, desc, splitters) {
+async function addExpense(paidBy, totalAmount, desc, splits) {
+  // splits = [{player, share}, ...]
   const { data, error } = await SB.from('expenses').insert({
-    paid_by: paidBy, amount: parseFloat(amount), description: desc
+    paid_by: paidBy, amount: parseFloat(totalAmount), description: desc
   }).select('id').single();
 
   if (error) { alert('Error: ' + error.message); return false; }
 
-  const share = parseFloat((amount / splitters.length).toFixed(2));
-  const rows = splitters.map(p => ({
-    expense_id: data.id, player_name: p, share: share
+  const rows = splits.map(s => ({
+    expense_id: data.id, player_name: s.player, share: parseFloat(s.share)
   }));
 
   const { error: e2 } = await SB.from('expense_splits').insert(rows);
@@ -199,10 +199,13 @@ async function getAllExpenses() {
 
   const { data: splits } = await SB.from('expense_splits').select('*').in('expense_id', ids);
 
-  return expenses.map(e => ({
-    ...e,
-    splitters: (splits || []).filter(s => s.expense_id === e.id).map(s => s.player_name)
-  }));
+  return expenses.map(e => {
+    const mySplits = (splits || []).filter(s => s.expense_id === e.id);
+    return {
+      ...e,
+      splits: mySplits.map(s => ({ player: s.player_name, share: s.share }))
+    };
+  });
 }
 
 function calculateBalances(expenses) {
@@ -211,12 +214,10 @@ function calculateBalances(expenses) {
 
   for (const e of expenses) {
     bal[e.paid_by] += e.amount;
-    const share = e.amount / e.splitters.length;
-    for (const s of e.splitters) {
-      bal[s] -= share;
+    for (const s of e.splits) {
+      bal[s.player] -= s.share;
     }
   }
-  // Round to 2 decimals
   for (const p of PLAYERS) bal[p] = parseFloat(bal[p].toFixed(2));
   return bal;
 }
@@ -271,7 +272,7 @@ async function render() {
         ${PLAYERS.map(p => `<option>${p}</option>`).join('')}
       </select>
       <label>Amount (£)</label>
-      <input type="number" id="amount" placeholder="0.00" step="0.01" min="0.01">
+      <input type="number" id="amount" placeholder="0.00" step="0.01" min="0.01" onchange="updateSplitInputs()" oninput="updateSplitInputs()">
       <label>Description</label>
       <input type="text" id="desc" placeholder="e.g. Team dinner, groceries…">
       <label>Split between</label>
@@ -279,8 +280,12 @@ async function render() {
         <span class="chip all selected" onclick="toggleAll()">Everyone</span>
         ${PLAYERS.map(p => `<span class="chip${selectedSplitters.has(p)?' selected':''}" data-player="${p}" onclick="toggleChip(this)">${p}</span>`).join('')}
       </div>
+      <div id="splitAmounts"></div>
+      <div id="splitTotal" style="font-size:0.72rem;color:var(--muted);margin-top:6px;display:none;"></div>
       <button class="btn" onclick="handleAdd()">Add Expense</button>
     </div>`;
+    // After render, attach listeners to update split amounts
+    setTimeout(updateSplitInputs, 50);
   }
 
   if (currentTab === 'balance') {
@@ -327,7 +332,7 @@ async function render() {
             <span class="amount">£${e.amount.toFixed(2)}</span>
           </div>
           <div class="desc">${e.description || 'No description'}</div>
-          <div class="split">Split: ${e.splitters.join(', ')}</div>
+          <div class="split">Split: ${e.splits.map(s => `${s.player} £${s.share.toFixed(2)}`).join(', ')}</div>
         </div>`;
       }
     }
@@ -342,6 +347,7 @@ window.toggleChip = function(el) {
   const p = el.dataset.player;
   if (el.classList.contains('selected')) selectedSplitters.add(p);
   else selectedSplitters.delete(p);
+  updateSplitInputs();
 };
 
 window.toggleAll = function() {
@@ -355,19 +361,69 @@ window.toggleAll = function() {
     allChip.classList.add('selected');
     document.querySelectorAll('.chip[data-player]').forEach(c => c.classList.add('selected'));
   }
+  updateSplitInputs();
+};
+
+window.updateSplitInputs = function() {
+  const container = document.getElementById('splitAmounts');
+  const totalEl = document.getElementById('splitTotal');
+  const amount = parseFloat(document.getElementById('amount')?.value) || 0;
+  if (!container) return;
+
+  const players = [...selectedSplitters];
+  if (!players.length) { container.innerHTML = ''; totalEl.style.display = 'none'; return; }
+
+  const evenShare = players.length ? parseFloat((amount / players.length).toFixed(2)) : 0;
+
+  container.innerHTML = players.map(p => `
+    <div style="display:flex;align-items:center;gap:8px;margin-top:6px;">
+      <span style="font-size:0.78rem;font-weight:600;min-width:70px;">${p}</span>
+      <span style="font-size:0.7rem;color:var(--muted);">£</span>
+      <input type="number" step="0.01" min="0" value="${evenShare}"
+        data-player="${p}" class="split-amt"
+        onchange="updateSplitTotal()"
+        style="flex:1;font:inherit;font-size:0.8rem;padding:5px 8px;border:1px solid var(--subtle);border-radius:6px;">
+    </div>
+  `).join('');
+
+  updateSplitTotal();
+};
+
+window.updateSplitTotal = function() {
+  const totalEl = document.getElementById('splitTotal');
+  const inputs = document.querySelectorAll('.split-amt');
+  let total = 0;
+  inputs.forEach(i => total += parseFloat(i.value) || 0);
+  totalEl.style.display = 'block';
+  const amt = parseFloat(document.getElementById('amount')?.value) || 0;
+  const diff = total - amt;
+  totalEl.innerHTML = `Split total: £${total.toFixed(2)} ${diff !== 0 ? `<span style="color:${Math.abs(diff)>0.02?'var(--accent)':'var(--green)'}">(${diff>0?'over by':'under by'} £${Math.abs(diff).toFixed(2)})</span>` : '<span style="color:var(--green)">✓</span>'}`;
 };
 
 window.handleAdd = async function() {
   const paidBy = document.getElementById('paidBy').value;
   const amount = document.getElementById('amount').value;
   const desc = document.getElementById('desc').value;
-  const splitters = [...selectedSplitters];
 
   if (!paidBy) return alert('Select who paid');
   if (!amount || parseFloat(amount) <= 0) return alert('Enter a valid amount');
-  if (!splitters.length) return alert('Select who to split with');
 
-  const ok = await addExpense(paidBy, amount, desc, splitters);
+  // Collect individual split amounts
+  const inputs = document.querySelectorAll('.split-amt');
+  const splits = [];
+  for (const inp of inputs) {
+    const v = parseFloat(inp.value);
+    if (v > 0) splits.push({ player: inp.dataset.player, share: v });
+  }
+  if (!splits.length) return alert('Select who to split with');
+
+  // Verify total matches
+  const splitTotal = splits.reduce((s, x) => s + x.share, 0);
+  if (Math.abs(splitTotal - parseFloat(amount)) > 0.02) {
+    return alert(`Split total (£${splitTotal.toFixed(2)}) must equal amount (£${parseFloat(amount).toFixed(2)})`);
+  }
+
+  const ok = await addExpense(paidBy, amount, desc, splits);
   if (ok) {
     selectedSplitters.clear();
     document.querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
@@ -378,6 +434,8 @@ window.handleAdd = async function() {
 };
 
 // ── Init ──
+// Everyone pre-selected by default
+PLAYERS.forEach(p => selectedSplitters.add(p));
 render();
 </script>
 </body>
