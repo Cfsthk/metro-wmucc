@@ -40,9 +40,28 @@
 
   main { padding: 8px 14px 64px; }
 
+  .web a { color: var(--muted); }
+
+  /* ── Category tabs ── */
+  .tab-row {
+    display: flex; gap: 0; padding: 0 14px;
+    border-bottom: 1px solid var(--subtle); margin-bottom: 14px;
+  }
+  .tab-row button {
+    flex: 1; font: inherit; font-size: 0.7rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.3px;
+    padding: 10px 6px; background: none; border: none;
+    border-bottom: 3px solid transparent;
+    color: var(--muted); cursor: pointer; transition: 0.15s;
+    white-space: nowrap;
+  }
+  .tab-row button.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  .cat-section { display: none; }
+  .cat-section.active { display: block; }
   .cat-title {
     font-size: 0.68rem; font-weight: 700; text-transform: uppercase;
-    letter-spacing: 0.6px; color: var(--accent); margin: 18px 0 8px;
+    letter-spacing: 0.6px; color: var(--accent); margin: 0 0 8px;
     padding-bottom: 4px; border-bottom: 2px solid var(--accent-dim);
   }
 
@@ -72,7 +91,15 @@
 </header>
 <a href="index.html" class="back-link">← Back to schedule</a>
 
+<div class="tab-row">
+  <button class="active" onclick="switchCat('all')">All</button>
+  <button onclick="switchCat('food')">🍽 Food</button>
+  <button onclick="switchCat('activity')">🎯 Activities</button>
+  <button onclick="switchCat('shop')">🛍 Shopping</button>
+</div>
+
 <main>
+  <div class="cat-section active" data-cat="all food">
   <div class="cat-title">🍽 Food & Drink</div>
 
   <div class="offer-card">
@@ -122,7 +149,9 @@
     <div class="address">📍 <a href="https://www.google.com/maps/search/?api=1&query=16+St+James+Street+Nottingham+NG1+6FG" target="_blank">16 St James's Street, NG1 6FG</a></div>
     <div class="web"><a href="https://maltcross.com" target="_blank">maltcross.com</a></div>
   </div>
+  </div>
 
+  <div class="cat-section active" data-cat="all activity">
   <div class="cat-title">🎯 Activities & Experiences</div>
 
   <div class="offer-card">
@@ -156,7 +185,9 @@
     <div class="address">📍 <a href="https://www.google.com/maps/search/?api=1&query=Splash+Art+Republic+Nottingham" target="_blank">Nottingham</a></div>
     <div class="web"><a href="https://splashartrepublic.co.uk/nottingham" target="_blank">splashartrepublic.co.uk/nottingham</a></div>
   </div>
+  </div>
 
+  <div class="cat-section active" data-cat="all shop">
   <div class="cat-title">🛍 Shopping</div>
 
   <div class="offer-card">
@@ -166,7 +197,18 @@
     <div class="address">📍 <a href="https://www.google.com/maps/search/?api=1&query=1+Smithy+Row+Nottingham+NG1+2BY" target="_blank">1–4 Smithy Row, NG1 2BY</a></div>
     <div class="web"><a href="https://visit-nottinghamshire.co.uk" target="_blank">visit-nottinghamshire.co.uk</a> · 08444 77 5678</div>
   </div>
+  </div>
 </main>
+
+<script>
+function switchCat(cat) {
+  document.querySelectorAll('.tab-row button').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  document.querySelectorAll('.cat-section').forEach(s => {
+    s.classList.toggle('active', s.dataset.cat.includes(cat));
+  });
+}
+</script>
 
 </body>
 </html>
