@@ -277,7 +277,7 @@ async function render() {
       <input type="text" id="desc" placeholder="e.g. Team dinner, groceries…">
       <label>Split between</label>
       <div class="player-chips" id="chipContainer">
-        <span class="chip all selected" onclick="toggleAll()">Everyone</span>
+        <span class="chip all" onclick="toggleAll()">Everyone</span>
         ${PLAYERS.map(p => `<span class="chip${selectedSplitters.has(p)?' selected':''}" data-player="${p}" onclick="toggleChip(this)">${p}</span>`).join('')}
       </div>
       <div id="splitAmounts"></div>
@@ -434,8 +434,6 @@ window.handleAdd = async function() {
 };
 
 // ── Init ──
-// Everyone pre-selected by default
-PLAYERS.forEach(p => selectedSplitters.add(p));
 render();
 </script>
 </body>
