@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Metro · Offers & Discounts</title>
+<style>
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+  :root {
+    --bg:        #fafafa;
+    --card:      #ffffff;
+    --text:      #1a1a1a;
+    --muted:     #6b6b6b;
+    --subtle:    #e5e5e5;
+    --accent:    #cc2233;
+    --accent-dim:#fce4e6;
+    --green:     #1a8a4a;
+    --radius:    10px;
+    --shadow:    0 1px 3px rgba(0,0,0,0.06);
+  }
+
+  html { font-size: 15px; -webkit-font-smoothing: antialiased; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.5;
+    min-height: 100vh; max-width: 500px; margin: 0 auto;
+  }
+
+  header {
+    padding: 24px 16px 8px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  header .dot { width: 11px; height: 11px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+  header h1 { font-size: 1.1rem; font-weight: 700; }
+  header span { color: var(--muted); font-size: 0.75rem; font-weight: 500; display: block; }
+
+  .back-link { display: inline-block; padding: 0 16px; font-size: 0.75rem; color: var(--accent); font-weight: 600; text-decoration: none; margin-bottom: 4px; }
+
+  main { padding: 8px 14px 64px; }
+
+  .cat-title {
+    font-size: 0.68rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.6px; color: var(--accent); margin: 18px 0 8px;
+    padding-bottom: 4px; border-bottom: 2px solid var(--accent-dim);
+  }
+
+  .offer-card {
+    background: var(--card); border: 1px solid var(--subtle);
+    border-radius: var(--radius); padding: 14px; margin-bottom: 10px;
+    box-shadow: var(--shadow);
+  }
+  .offer-card h3 { font-size: 0.9rem; font-weight: 700; margin-bottom: 2px; }
+  .offer-card .offer { font-size: 0.82rem; color: var(--green); font-weight: 600; margin-bottom: 6px; }
+  .offer-card .details { font-size: 0.75rem; color: var(--muted); line-height: 1.5; }
+  .offer-card .address {
+    display: flex; align-items: center; gap: 6px; margin-top: 8px;
+    font-size: 0.73rem; font-weight: 500;
+  }
+  .offer-card .address a { color: var(--accent); text-decoration: none; font-weight: 600; }
+  .offer-card .address a:hover { text-decoration: underline; }
+  .offer-card .web { font-size: 0.7rem; margin-top: 2px; }
+  .offer-card .web a { color: var(--muted); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="dot"></div>
+  <div><h1>Offers & Discounts</h1><span>WMUCC 2026 · Local Nottingham</span></div>
+</header>
+<a href="index.html" class="back-link">← Back to schedule</a>
+
+<main>
+  <div class="cat-title">🍽 Food & Drink</div>
+
+  <div class="offer-card">
+    <h3>Revolución de Cuba</h3>
+    <div class="offer">3 Tapas for £15 · Lunch Deal £9.95</div>
+    <div class="details">Tapas: Mon–Sat 12pm–8pm. Lunch: Mon–Fri 12pm–4pm (main + drink).</div>
+    <div class="address">📍 <a href="https://www.google.com/maps/search/?api=1&query=26+Market+Street+Nottingham+NG1+6HW" target="_blank">26–28 Market Street, NG1 6HW</a></div>
+    <div class="web"><a href="https://revoluciondecuba.com/bar/nottingham" target="_blank">revoluciondecuba.com</a></div>
+  </div>
+
+  <div class="offer-card">
+    <h3>Hemisphere Restaurant & Bar</h3>
+    <div class="offer">Arvo Bites £25 · Sharing Plates £35pp</div>
+    <div class="details">Arvo Bites: 2 dishes + 1 side, Tue–Thu 12pm–6pm, Fri–Sat until 5pm. Sharing Plates: 2 nibbles + 5 plates + 1 side + drink, Tue–Thu 12pm–9pm, Sun 4pm–9pm.</div>
+    <div class="address">📍 <a href="https://www.google.com/maps/search/?api=1&query=Tudor+Square+West+Bridgford+Nottingham" target="_blank">26s Tudor Square, West Bridgford, Nottingham</a></div>
+    <div class="web"><a href="https://hemispherewb.co.uk" target="_blank">hemispherewb.co.uk</a></div>
+  </div>
+
+  <div class="offer-card">
+    <h3>The Alchemist</h3>
+    <div class="offer">20% off food · 25% off first visit</div>
+    <div class="details">Stylish cocktail bar & restaurant. Sign up online for discount.</div>
+    <div class="address">📍 <a href="https://www.google.com/maps/search/?api=1&query=King+Street+Nottingham+NG1+2AY" target="_blank">King Street, Nottingham, NG1 2AY</a></div>
+    <div class="web"><a href="https://thealchemistbars.com" target="_blank">thealchemistbars.com</a></div>
+  </div>
+
+  <div class="offer-card">
+    <h3>Masala Junction</h3>
+    <div class="offer">15% off food</div>
+    <div class="details">Award-winning Indian dining. Excludes Saturdays & drinks. Quote VISIT15 when booking.</div>
+    <div class="address">📍 <a href="https://www.google.com/maps/search/?api=1&query=301+Mansfield+Road+Nottingham+NG5+2DA" target="_blank">301 Mansfield Road, NG5 2DA</a></div>
+    <div class="web"><a href="https://masalajunction.co.uk" target="_blank">masalajunction.co.uk</a> · 0115 962 2366</div>
+  </div>
+
+  <div class="offer-card">
+    <h3>MemSaab</h3>
+    <div class="offer">15% off food</div>
+    <div class="details">Upscale Indian fine dining. Excludes Saturdays & drinks. Quote VISIT15 when booking.</div>
+    <div class="address">📍 <a href="https://www.google.com/maps/search/?api=1&query=12+Maid+Marian+Way+Nottingham+NG1+6HS" target="_blank">12–14 Maid Marian Way, NG1 6HS</a></div>
+    <div class="web"><a href="https://mem-saab.co.uk" target="_blank">mem-saab.co.uk</a> · 0115 957 0009</div>
+  </div>
+
+  <div class="offer-card">
+    <h3>Malt Cross</h3>
+    <div class="offer">10% off food & drinks</div>
+    <div class="details">Historic bar & live music venue. 10% off food, low/non-alcohol fridge & Peroni. Sign up via website.</div>
+    <div class="address">📍 <a href="https://www.google.com/maps/search/?api=1&query=16+St+James+Street+Nottingham+NG1+6FG" target="_blank">16 St James's Street, NG1 6FG</a></div>
+    <div class="web"><a href="https://maltcross.com" target="_blank">maltcross.com</a></div>
+  </div>
+
+  <div class="cat-title">🎯 Activities & Experiences</div>
+
+  <div class="offer-card">
+    <h3>Go Quest Adventures</h3>
+    <div class="offer">20% off all Quests</div>
+    <div class="details">Self-guided interactive treasure hunt through the city. Part sightseeing, part outdoor escape room. Use code <strong>PLAYNOTTS</strong>.</div>
+    <div class="address">📍 <a href="https://www.google.com/maps/search/?api=1&query=Nottingham+city+centre" target="_blank">Nottingham city centre</a></div>
+    <div class="web"><a href="https://goquestadventures.com" target="_blank">goquestadventures.com</a></div>
+  </div>
+
+  <div class="offer-card">
+    <h3>Axed</h3>
+    <div class="offer">20% off activities Sun–Fri</div>
+    <div class="details">Urban axe throwing experience. Show the leaflet to redeem.</div>
+    <div class="address">📍 <a href="https://www.google.com/maps/search/?api=1&query=The+Cornerhouse+Burton+Street+Nottingham+NG1+4DB" target="_blank">2nd Floor, The Cornerhouse, Burton Street, NG1 4DB</a></div>
+    <div class="web"><a href="https://axedglobal.com" target="_blank">axedglobal.com</a></div>
+  </div>
+
+  <div class="offer-card">
+    <h3>Robin Hood Town Tours</h3>
+    <div class="offer">£5 off adult ticket</div>
+    <div class="details">Award-winning guided walking tour with Nottingham's Official Outlaw. Saturdays 2pm only. Cash only — show event ticket.</div>
+    <div class="address">📍 <a href="https://www.google.com/maps/search/?api=1&query=The+Cross+Keys+Pub+Nottingham+NG1+2GJ" target="_blank">Starts at The Cross Keys Pub, NG1 2GJ</a></div>
+    <div class="web"><a href="https://ezekialbone.com" target="_blank">ezekialbone.com</a> · 07941 210986</div>
+  </div>
+
+  <div class="offer-card">
+    <h3>Splash Art Republic</h3>
+    <div class="offer">£5 off Wed & Thu</div>
+    <div class="details">Action art experience — flying paint, pouring colour over sculptures. £5 off Splash Art & Pour Art tickets.</div>
+    <div class="address">📍 <a href="https://www.google.com/maps/search/?api=1&query=Splash+Art+Republic+Nottingham" target="_blank">Nottingham</a></div>
+    <div class="web"><a href="https://splashartrepublic.co.uk/nottingham" target="_blank">splashartrepublic.co.uk/nottingham</a></div>
+  </div>
+
+  <div class="cat-title">🛍 Shopping</div>
+
+  <div class="offer-card">
+    <h3>Nottingham Tourism & Travel Centre</h3>
+    <div class="offer">10% off all items</div>
+    <div class="details">Souvenirs, attraction tickets & visitor info. Excludes tickets & Forest merch. Show event ticket/badge.</div>
+    <div class="address">📍 <a href="https://www.google.com/maps/search/?api=1&query=1+Smithy+Row+Nottingham+NG1+2BY" target="_blank">1–4 Smithy Row, NG1 2BY</a></div>
+    <div class="web"><a href="https://visit-nottinghamshire.co.uk" target="_blank">visit-nottinghamshire.co.uk</a> · 08444 77 5678</div>
+  </div>
+</main>
+
+</body>
+</html>
