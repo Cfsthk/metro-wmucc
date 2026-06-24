@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>UK Road Trip · Rugby → Scotland → London</title>
+<style>
+:root {
+  --bg: #f5f0e8;
+  --card: #fffef9;
+  --accent: #8b4513;
+  --accent2: #c75b39;
+  --text: #2c1810;
+  --muted: #6b5b4f;
+  --border: #d4c5b2;
+  --tag-bg: #f0e6d3;
+  --day1: #d4a574;
+  --day2: #8fbc8f;
+  --day3: #7b9eb3;
+  --day4: #b8a9c9;
+  --day5: #e8a87c;
+  --day6: #d4a574;
+  --day7: #95b8d1;
+  --free: #4a7c59;
+  --shadow: 0 2px 12px rgba(44, 24, 16, 0.08);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 15px; scroll-behavior: smooth; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  max-width: 500px;
+  margin: 0 auto;
+  min-height: 100vh;
+}
+
+/* --- HEADER --- */
+header {
+  background: linear-gradient(135deg, #3d2b1f 0%, #5c3d2e 40%, #8b6914 100%);
+  color: #fff;
+  padding: 24px 16px 20px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+header::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+header h1 { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.3px; }
+header p { font-size: 0.82rem; opacity: 0.85; margin-top: 4px; }
+
+/* --- TRIP META BAR --- */
+.trip-meta {
+  display: flex;
+  justify-content: space-around;
+  padding: 12px 8px;
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  font-size: 0.72rem;
+  color: var(--muted);
+  gap: 4px;
+  flex-wrap: wrap;
+}
+.trip-meta span { text-align: center; white-space: nowrap; }
+.trip-meta strong { display: block; color: var(--accent); font-size: 0.85rem; }
+
+/* --- DAY NAV PILLS --- */
+.day-nav {
+  display: flex;
+  gap: 4px;
+  padding: 10px 8px;
+  overflow-x: auto;
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.day-nav::-webkit-scrollbar { display: none; }
+.day-pill {
+  flex-shrink: 0;
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: 1.5px solid var(--border);
+  background: #fff;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+  color: var(--muted);
+}
+.day-pill.active {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+.day-pill:active { transform: scale(0.96); }
+
+/* --- MAIN SECTION --- */
+main { padding: 12px 10px 80px; }
+.day-section { display: none; }
+.day-section.active { display: block; }
+
+.day-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.day-dot {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-weight: 700; font-size: 0.9rem;
+  flex-shrink: 0;
+}
+.day-title { font-size: 1.15rem; font-weight: 700; }
+.day-subtitle { font-size: 0.75rem; color: var(--muted); }
+
+/* --- ROUTE CARD --- */
+.route-card {
+  background: var(--card);
+  border-radius: 12px;
+  padding: 10px 12px;
+  margin-bottom: 10px;
+  border: 1px solid var(--border);
+  font-size: 0.78rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.route-icon { font-size: 1.3rem; flex-shrink: 0; }
+.route-text strong { color: var(--accent); }
+
+/* --- SPOT CARD --- */
+.spot-card {
+  background: var(--card);
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 10px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  transition: all 0.2s;
+  position: relative;
+}
+.spot-card.selected {
+  border-color: var(--accent2);
+  box-shadow: 0 0 0 2px rgba(199, 91, 57, 0.15);
+}
+.spot-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.spot-name {
+  font-weight: 700;
+  font-size: 0.95rem;
+  flex: 1;
+}
+.spot-check {
+  width: 22px; height: 22px;
+  border-radius: 6px;
+  border: 2px solid var(--border);
+  flex-shrink: 0;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s;
+  font-size: 0.7rem;
+}
+.spot-check.checked {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: #fff;
+}
+.spot-tags { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 6px; }
+.tag {
+  font-size: 0.65rem;
+  padding: 2px 7px;
+  border-radius: 12px;
+  background: var(--tag-bg);
+  color: var(--accent);
+  font-weight: 600;
+}
+.tag.free { background: #d4edda; color: var(--free); }
+.tag.paid { background: #ffe4c4; color: #b85c1a; }
+.tag.food { background: #fce4ec; color: #b71c4e; }
+.tag.must { background: #fff3cd; color: #856404; }
+.spot-desc { font-size: 0.78rem; color: var(--muted); margin-bottom: 8px; line-height: 1.5; }
+.spot-price { font-size: 0.78rem; font-weight: 600; margin-bottom: 6px; }
+.spot-links { display: flex; gap: 8px; flex-wrap: wrap; }
+.spot-link {
+  font-size: 0.7rem;
+  padding: 4px 10px;
+  border-radius: 14px;
+  background: var(--accent);
+  color: #fff;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: opacity 0.15s;
+}
+.spot-link:active { opacity: 0.7; }
+.spot-link.web { background: #5c3d2e; }
+
+/* --- SECTION HEADER --- */
+.section-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  margin: 14px 0 8px;
+  padding-left: 2px;
+  font-weight: 700;
+}
+
+/* --- RESTAURANT CARD --- */
+.food-card {
+  background: var(--card);
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  border: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+.food-info { flex: 1; }
+.food-name { font-weight: 600; font-size: 0.85rem; }
+.food-desc { font-size: 0.7rem; color: var(--muted); }
+.food-price { font-size: 0.72rem; font-weight: 600; color: var(--accent2); }
+
+/* --- FLOATING BAR --- */
+.floating-bar {
+  position: fixed;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 500px;
+  width: calc(100% - 24px);
+  background: var(--accent);
+  color: #fff;
+  border-radius: 16px;
+  padding: 10px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 20px rgba(139, 69, 19, 0.3);
+  z-index: 100;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.floating-bar:active { opacity: 0.9; }
+.floating-count { background: rgba(255,255,255,0.25); border-radius: 12px; padding: 2px 10px; font-size: 0.75rem; }
+
+/* --- TIPS SECTION --- */
+.tips-card {
+  background: linear-gradient(135deg, #fffef9 0%, #faf5e8 100%);
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 10px;
+  border: 1.5px dashed var(--accent);
+}
+.tips-card h3 { font-size: 0.95rem; margin-bottom: 8px; color: var(--accent); }
+.tip-item {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-size: 0.78rem;
+  align-items: flex-start;
+}
+.tip-icon { flex-shrink: 0; font-size: 1rem; }
+.tip-text strong { color: var(--accent); }
+
+/* --- MODAL --- */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(44, 24, 16, 0.6);
+  z-index: 200;
+  justify-content: center;
+  align-items: flex-end;
+}
+.modal-overlay.show { display: flex; }
+.modal-sheet {
+  background: var(--card);
+  border-radius: 20px 20px 0 0;
+  padding: 20px 16px 28px;
+  max-width: 500px;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+.modal-handle {
+  width: 40px; height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  margin: 0 auto 16px;
+}
+.modal-sheet h3 { font-size: 1.05rem; margin-bottom: 12px; }
+.modal-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #f0e6d3;
+  font-size: 0.82rem;
+}
+.modal-remove {
+  color: #c0392b;
+  font-size: 0.7rem;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+.modal-total {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 2px solid var(--accent);
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 380px) {
+  html { font-size: 14px; }
+  .day-pill { padding: 5px 10px; font-size: 0.7rem; }
+}
+
+/* --- PRINT --- */
+@media print {
+  .floating-bar, .day-nav, .modal-overlay { display: none !important; }
+  .day-section { display: block !important; page-break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🇬🇧 UK Road Trip</h1>
+  <p>Rugby → Cotswolds → Glasgow → Edinburgh → Northumberland → London</p>
+</header>
+
+<div class="trip-meta">
+  <span><strong>📍 5–11 July</strong>7 days</span>
+  <span><strong>🚗 ~1,200 mi</strong>driving</span>
+  <span><strong>🏰 8 castles</strong>heritage</span>
+  <span><strong>💰 £200–350</strong>attractions</span>
+</div>
+
+<nav class="day-nav" id="dayNav"></nav>
+
+<main id="main"></main>
+
+<div class="floating-bar" onclick="openSummary()">
+  <span>📋 My Itinerary</span>
+  <span class="floating-count" id="floatCount">0 spots</span>
+</div>
+
+<div class="modal-overlay" id="modal">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <h3>📋 My Selected Spots</h3>
+    <div id="modalList"><p style="color:var(--muted);font-size:0.82rem;">Tap the checkboxes on spot cards to add them here.</p></div>
+    <div class="modal-total" id="modalTotal" style="display:none"></div>
+    <button onclick="closeSummary()" style="margin-top:12px;width:100%;padding:10px;border-radius:10px;border:none;background:var(--accent);color:#fff;font-weight:600;font-size:0.85rem;cursor:pointer">Done</button>
+  </div>
+</div>
+
+<script>
+// ── DATA ──────────────────────────────────────
+const DAYS = [
+  {
+    id: 1, date: '5 July (Sat)', title: 'Rugby & Warwick', color: '#d4a574',
+    subtitle: 'Arrive Rugby morning · Explore medieval England',
+    route: { from: 'Rugby', to: 'Warwick & Stratford', drive: '30 min each way', map: 'https://www.google.com/maps/dir/Rugby,+UK/Warwick+Castle,+UK/Stratford-upon-Avon,+UK' },
+    spots: [
+      { id: 's1', name: '🏰 Warwick Castle', type: 'heritage', tags: ['Heritage', 'Paid', 'Must-See'], desc: 'One of Britain\'s finest medieval castles — towers, dungeons, trebuchet shows, and beautiful gardens. Over 1,100 years of history. Allow 3–4 hours.', price: '£24–28 online (save ~15% vs gate £32)', map: 'https://maps.google.com/maps?q=Warwick+Castle+CV34+6AH', web: 'https://www.warwick-castle.com/' },
+      { id: 's2', name: '🏛️ Rugby School & Museum', type: 'museum', tags: ['Heritage', 'Paid'], desc: 'Where the sport of rugby was born in 1823. Visit the school grounds, the Webb Ellis Museum, and see the famous field.', price: '~£8 museum entry', map: 'https://maps.google.com/maps?q=Rugby+School+CV22+5EH', web: 'https://www.rugbyschool.co.uk/' },
+      { id: 's3', name: '✍️ Stratford-upon-Avon', type: 'heritage', tags: ['Heritage', 'Paid'], desc: 'Shakespeare\'s birthplace and hometown. Visit the Birthplace, Anne Hathaway\'s Cottage, and stroll the charming Tudor streets along the River Avon.', price: 'Birthplace ~£17.50 (combo ticket £25 for 3 properties)', map: 'https://maps.google.com/maps?q=Shakespeare+Birthplace+Stratford+upon+Avon+CV37+6QW', web: 'https://www.shakespeare.org.uk/' },
+      { id: 's4', name: '⛪ Coventry Cathedral', type: 'heritage', tags: ['Heritage', 'Free'], desc: 'Stunning contrast of the bombed-out medieval ruins and the modern 1962 cathedral. Powerful symbol of reconciliation. 20 min from Rugby.', price: 'Free (suggested donation £5)', map: 'https://maps.google.com/maps?q=Coventry+Cathedral+CV1+5FB' },
+    ],
+    restaurants: [
+      { name: 'The Merchants Inn', desc: 'Traditional British pub, best Sunday roast in Rugby', price: '££' },
+      { name: 'La Casa Loco', desc: 'Excellent tapas, lively atmosphere', price: '££' },
+      { name: 'The Fourteas', desc: '1940s-themed tea room near Shakespeare\'s Birthplace, Stratford', price: '£' },
+      { name: 'The Old Thatch Tavern', desc: 'Oldest pub in Stratford (~1470), proper ales', price: '££' },
+    ]
+  },
+  {
+    id: 2, date: '6 July (Sun)', title: 'Cotswolds → Lake District → Glasgow', color: '#8fbc8f',
+    subtitle: 'Scenic drive north · 2–3 stops · ~8h total driving',
+    route: { from: 'Rugby', to: 'Glasgow via Cotswolds & Lake District', drive: '~8h driving + stops', map: 'https://www.google.com/maps/dir/Rugby,+UK/Bourton-on-the-Water,+UK/Windermere,+UK/Glasgow,+UK' },
+    spots: [
+      { id: 's5', name: '🏘️ Bourton-on-the-Water', type: 'scenery', tags: ['Scenery', 'Free', 'Must-See'], desc: '"Venice of the Cotswolds" — picturesque stone bridges over the River Windrush, honey-coloured cottages, and charming tea rooms. Perfect morning stroll.', price: 'Free (village walk)', map: 'https://maps.google.com/maps?q=Bourton+on+the+Water+GL54+2BU' },
+      { id: 's6', name: '🏘️ Bibury', type: 'scenery', tags: ['Scenery', 'Free', 'Must-See'], desc: 'William Morris called it "the most beautiful village in England." Arlington Row — the most photographed cottages in the UK.', price: 'Free (village walk, parking ~£3)', map: 'https://maps.google.com/maps?q=Bibury+GL7+5NL' },
+      { id: 's7', name: '🏞️ Lake Windermere', type: 'scenery', tags: ['Scenery', 'Free', 'Stop'], desc: 'England\'s largest lake. Quick stop at Bowness-on-Windermere — stretch your legs, grab lunch by the water, see the swans. Optional lake cruise if time.', price: 'Free (shore walk); cruise ~£12', map: 'https://maps.google.com/maps?q=Bowness+on+Windermere+LA23+3HJ' },
+      { id: 's8', name: '🏴󠁧󠁢󠁳󠁣󠁴󠁿 Gretna Green', type: 'stop', tags: ['Heritage', 'Free', 'Stop'], desc: 'Famous wedding village right at the Scotland-England border. Quick photo stop at the Old Blacksmith\'s Shop — centuries of runaway wedding history.', price: 'Free (museum £5 optional)', map: 'https://maps.google.com/maps?q=Gretna+Green+DG16+5EA' },
+    ],
+    restaurants: [
+      { name: 'The Old Manse Hotel', desc: 'Riverside pub in Bourton, Cotswolds classics', price: '££' },
+      { name: 'The Angel at Hetton', desc: 'Legendary gastropub en route (Michelin-mentioned)', price: '£££' },
+      { name: 'The Patterdale Hotel Bar', desc: 'Quick pub lunch near Ullswater, Lake District', price: '£' },
+    ]
+  },
+  {
+    id: 3, date: '7 July (Mon)', title: 'Glasgow → Edinburgh', color: '#7b9eb3',
+    subtitle: 'Glasgow museums morning · Edinburgh Castle afternoon',
+    route: { from: 'Glasgow', to: 'Edinburgh', drive: '~1h', map: 'https://www.google.com/maps/dir/Glasgow,+UK/Edinburgh,+UK' },
+    spots: [
+      { id: 's9', name: '🎨 Kelvingrove Art Gallery & Museum', type: 'museum', tags: ['Museum', 'Free', 'Must-See'], desc: 'Scotland\'s most popular free attraction — from Salvador Dalí\'s Christ of St John to natural history and arms & armour. Beautiful Victorian building. Don\'t miss the daily organ recital at 1pm.', price: 'FREE', map: 'https://maps.google.com/maps?q=Kelvingrove+Art+Gallery+Glasgow+G3+8AG', web: 'https://www.glasgowlife.org.uk/museums/kelvingrove' },
+      { id: 's10', name: '⛪ Glasgow Cathedral', type: 'heritage', tags: ['Heritage', 'Free'], desc: 'Magnificent 12th-century Gothic cathedral, the only mainland Scottish cathedral to survive the Reformation intact. Stunning stained glass and crypt.', price: 'FREE', map: 'https://maps.google.com/maps?q=Glasgow+Cathedral+G4+0QZ' },
+      { id: 's11', name: '🏛️ University of Glasgow', type: 'scenery', tags: ['Scenery', 'Free'], desc: 'Hogwarts-like campus — the cloisters and quadrangle are straight out of Harry Potter. One of the oldest universities in the world (1451).', price: 'FREE (grounds & cloisters)', map: 'https://maps.google.com/maps?q=University+of+Glasgow+G12+8QQ' },
+      { id: 's12', name: '🏰 Edinburgh Castle', type: 'heritage', tags: ['Heritage', 'Paid', 'Must-See'], desc: 'Scotland\'s most iconic fortress, perched atop an extinct volcano. Crown Jewels, Stone of Destiny, Mons Meg cannon, and panoramic views over the city. Book online in advance — sells out in summer!', price: '£23.50 online / £26 walk-up', map: 'https://maps.google.com/maps?q=Edinburgh+Castle+EH1+2NG', web: 'https://www.edinburghcastle.scot/' },
+      { id: 's13', name: '🏘️ Royal Mile', type: 'scenery', tags: ['Scenery', 'Shopping', 'Free'], desc: 'The historic spine of Edinburgh\'s Old Town — cobbled streets, closes (alleys), street performers, whisky shops, and tartan weavers. Walk from Castle to Holyrood.', price: 'Free (walking & window shopping)', map: 'https://maps.google.com/maps?q=Royal+Mile+Edinburgh+EH1+1QS' },
+      { id: 's14', name: '🌄 Arthur\'s Seat', type: 'scenery', tags: ['Scenery', 'Free', 'Must-See'], desc: 'Extinct volcano in Holyrood Park. A 45-min hike rewards you with the best panoramic view of Edinburgh, the Forth, and Fife. Sunset hike is magical.', price: 'FREE', map: 'https://maps.google.com/maps?q=Arthur+Seat+Edinburgh+EH8+8AZ' },
+    ],
+    restaurants: [
+      { name: 'Ubiquitous Chip', desc: 'Glasgow institution — Scottish produce, leafy courtyard', price: '£££' },
+      { name: 'The Willow Tea Rooms', desc: 'Charles Rennie Mackintosh-designed, Glasgow (lunch/tea)', price: '££' },
+      { name: 'The Witchery by the Castle', desc: 'Ultimate Edinburgh fine dining, gothic setting', price: '££££' },
+      { name: 'Oink', desc: 'Legendary hog roast rolls on Victoria Street (cheap eat)', price: '£' },
+      { name: 'The Dome', desc: 'Spectacular Georgian building, afternoon tea or dinner', price: '£££' },
+    ]
+  },
+  {
+    id: 4, date: '8 July (Tue)', title: 'East Coast Heritage Route → Rugby', color: '#b8a9c9',
+    subtitle: 'Edinburgh → Northumberland castles → York → Rugby · ~7h driving',
+    route: { from: 'Edinburgh', to: 'Rugby via Northumberland & York', drive: '~7h driving + stops', map: 'https://www.google.com/maps/dir/Edinburgh,+UK/Alnwick+Castle,+UK/Bamburgh+Castle,+UK/Durham,+UK/York,+UK/Rugby,+UK' },
+    spots: [
+      { id: 's15', name: '🏰 Alnwick Castle', type: 'heritage', tags: ['Heritage', 'Paid', 'Must-See'], desc: '"The Windsor of the North" — filmed as Hogwarts in the first two Harry Potter films. Still home to the Duke of Northumberland. Broomstick training on the very lawns where Harry learned to fly!', price: '~£18.50 adult', map: 'https://maps.google.com/maps?q=Alnwick+Castle+NE66+1NQ', web: 'https://www.alnwickcastle.com/' },
+      { id: 's16', name: '🏰 Bamburgh Castle', type: 'heritage', tags: ['Heritage', 'Paid'], desc: 'Dramatic castle on a volcanic dolerite outcrop overlooking the North Sea. One of the most imposing coastal fortresses in Europe. Saxon capital of Northumbria.', price: '~£15.50 adult', map: 'https://maps.google.com/maps?q=Bamburgh+Castle+NE69+7DF', web: 'https://www.bamburghcastle.com/' },
+      { id: 's17', name: '⛪ Durham Cathedral', type: 'heritage', tags: ['Heritage', 'Free'], desc: 'UNESCO World Heritage — Norman Romanesque masterpiece (1093–1133). Voted Britain\'s best building. Stunning cloisters. Harry Potter filming location (Hogwarts interior).', price: 'Free (suggested donation £5)', map: 'https://maps.google.com/maps?q=Durham+Cathedral+DH1+3EH' },
+      { id: 's18', name: '🏙️ York', type: 'heritage', tags: ['Heritage', 'Shopping', 'Must-See'], desc: 'Walk the medieval Shambles (Diagon Alley vibes), visit York Minster — the largest Gothic cathedral in Northern Europe — and the city walls. Great for afternoon tea and shopping.', price: 'York Minster ~£16; walking the walls free', map: 'https://maps.google.com/maps?q=York+Minster+YO1+7HH' },
+    ],
+    restaurants: [
+      { name: 'The Treehouse Restaurant', desc: 'Magical treetop dining at Alnwick Garden', price: '£££' },
+      { name: 'Bettys Café Tea Rooms', desc: 'Iconic Yorkshire tea room in York since 1919', price: '££' },
+      { name: 'The Star Inn The City', desc: 'Modern Yorkshire food by the River Ouse', price: '£££' },
+    ]
+  },
+  {
+    id: 5, date: '9 July (Wed)', title: 'Train to London · Westminster', color: '#e8a87c',
+    subtitle: 'Rugby → London (1h train) · Royal & political London',
+    route: { from: 'Rugby', to: 'London Euston by train', drive: '~1h by train (~£30–50 advance)', map: 'https://www.google.com/maps/dir/Rugby+Station,+UK/London+Euston,+UK' },
+    spots: [
+      { id: 's19', name: '🏛️ British Museum', type: 'museum', tags: ['Museum', 'Free', 'Must-See'], desc: 'One of the world\'s greatest museums. Rosetta Stone, Egyptian mummies, Parthenon Marbles, Sutton Hoo treasure. Can easily spend 3–4 hours. Book free timed entry online.', price: 'FREE (special exhibitions ~£15–20)', map: 'https://maps.google.com/maps?q=British+Museum+WC1B+3DG', web: 'https://www.britishmuseum.org/' },
+      { id: 's20', name: '🏛️ Westminster Abbey', type: 'heritage', tags: ['Heritage', 'Paid', 'Must-See'], desc: 'Coronation church since 1066. Royal tombs, Poets\' Corner, stunning Gothic architecture. Every British monarch since William the Conqueror.', price: '~£29 online / £32 walk-up', map: 'https://maps.google.com/maps?q=Westminster+Abbey+SW1P+3PA', web: 'https://www.westminster-abbey.org/' },
+      { id: 's21', name: '👑 Buckingham Palace', type: 'heritage', tags: ['Heritage', 'Free-Exterior'], desc: 'State Rooms open to visitors late July–Sept only. You\'ll be a bit early BUT Changing of the Guard (11am Mon/Wed/Fri/Sun) is free to watch. Check schedule.', price: 'Free (exterior & Changing of Guard)', map: 'https://maps.google.com/maps?q=Buckingham+Palace+SW1A+1AA' },
+      { id: 's22', name: '🎡 Houses of Parliament & Big Ben', type: 'landmark', tags: ['Landmark', 'Free-Exterior'], desc: 'Iconic Elizabeth Tower (Big Ben) and the Palace of Westminster. Walk across Westminster Bridge for the best photo spot. Parliament tours available if booked.', price: 'Free (exterior view)', map: 'https://maps.google.com/maps?q=Big+Ben+SW1A+0AA' },
+      { id: 's23', name: '🖼️ National Gallery', type: 'museum', tags: ['Museum', 'Free'], desc: 'Trafalgar Square — world-class collection from da Vinci to Van Gogh. Free entry.' , price: 'FREE', map: 'https://maps.google.com/maps?q=National+Gallery+WC2N+5DN' },
+    ],
+    restaurants: [
+      { name: 'Dishoom Covent Garden', desc: 'Bombay-style café, legendary black daal', price: '££' },
+      { name: 'Flat Iron', desc: 'Great steak for ~£14, multiple London locations', price: '££' },
+      { name: 'Borough Market (preview)', desc: 'Food lover\'s paradise — save for Day 6 lunch', price: '£–££' },
+    ]
+  },
+  {
+    id: 6, date: '10 July (Thu)', title: 'Tower, Markets & Shopping', color: '#d4a574',
+    subtitle: 'East & Central London · Food markets · Retail therapy',
+    route: { from: 'Tower Hill', to: 'Oxford Street', drive: 'Walking + Tube (get an Oyster card or use contactless)', map: 'https://www.google.com/maps/dir/Tower+of+London,+UK/Borough+Market,+UK/Covent+Garden,+UK/Oxford+Street,+UK' },
+    spots: [
+      { id: 's24', name: '🏰 Tower of London', type: 'heritage', tags: ['Heritage', 'Paid', 'Must-See'], desc: 'Crown Jewels, White Tower, Beefeater tours, ravens, and 1,000 years of blood-soaked history. Go early — first entry 9am to beat crowds. The Beefeater tours are hilarious and free with ticket.', price: '~£34.80 online', map: 'https://maps.google.com/maps?q=Tower+of+London+EC3N+4AB', web: 'https://www.hrp.org.uk/tower-of-london/' },
+      { id: 's25', name: '🌉 Tower Bridge', type: 'landmark', tags: ['Landmark', 'Paid'], desc: 'Walk the glass floor high above the Thames. Optional — exterior view is free and spectacular.', price: '~£12.30 (glass floor); free exterior', map: 'https://maps.google.com/maps?q=Tower+Bridge+SE1+2UP' },
+      { id: 's26', name: '🍽️ Borough Market', type: 'food', tags: ['Food', 'Free-Entry', 'Must-See'], desc: 'London\'s oldest food market (since 1014 AD). Artisan cheese, fresh oysters, paella, gourmet doughnuts, craft coffee. Go hungry. Best lunch stop in London.', price: 'Free entry; food ~£5–15 per item', map: 'https://maps.google.com/maps?q=Borough+Market+SE1+9AL', web: 'https://boroughmarket.org.uk/' },
+      { id: 's27', name: '🎭 Covent Garden', type: 'shopping', tags: ['Shopping', 'Scenery', 'Free'], desc: 'Street performers, boutique shops, Apple Market crafts, and the Royal Opera House arcade. Great people-watching.', price: 'Free (window shopping)', map: 'https://maps.google.com/maps?q=Covent+Garden+WC2E+8RF' },
+      { id: 's28', name: '🛍️ Oxford Street & Liberty', type: 'shopping', tags: ['Shopping', 'Free'], desc: 'Major shopping thoroughfare. For a more unique experience, visit Liberty London — the Tudor-revival department store with iconic floral prints.', price: 'Free (shopping $$)', map: 'https://maps.google.com/maps?q=Liberty+London+W1B+5AH' },
+      { id: 's29', name: '🌇 Sky Garden', type: 'scenery', tags: ['Scenery', 'Free', 'Must-See'], desc: 'Free indoor garden with 360° views from the Walkie-Talkie building. Must book free tickets online weeks in advance (released Mondays). Sunset slot is prime. Backup: The Garden at 120 (no booking needed).', price: 'FREE (book online in advance)', map: 'https://maps.google.com/maps?q=Sky+Garden+EC3M+8AF', web: 'https://skygarden.london/' },
+    ],
+    restaurants: [
+      { name: 'Padella', desc: 'Fresh pasta, Borough Market area, queues but worth it', price: '£' },
+      { name: 'Dishoom Shoreditch', desc: 'If you missed it Day 5 — excellent Indian', price: '££' },
+      { name: 'Hawksmoor Seven Dials', desc: 'Best Sunday roast / steak in Covent Garden', price: '£££' },
+      { name: 'Bao Soho', desc: 'Taiwanese steamed buns, excellent and affordable', price: '£' },
+    ]
+  },
+  {
+    id: 7, date: '11 July (Fri)', title: 'Last Day · Fly Home', color: '#95b8d1',
+    subtitle: 'Morning sightseeing · ~5pm head to LHR · 7:20pm BA flight to HK',
+    route: { from: 'Central London', to: 'London Heathrow (LHR) Terminal 5', drive: '~1h by tube/Heathrow Express', map: 'https://www.google.com/maps/dir/London,+UK/Heathrow+Airport+Terminal+5,+UK' },
+    spots: [
+      { id: 's30', name: '🦕 Natural History Museum', type: 'museum', tags: ['Museum', 'Free', 'Must-See'], desc: 'Diplodocus skeleton, earthquake simulator, Darwin Centre cocoon. Stunning Romanesque building. Perfect morning activity. Opens 10am.', price: 'FREE', map: 'https://maps.google.com/maps?q=Natural+History+Museum+SW7+5BD', web: 'https://www.nhm.ac.uk/' },
+      { id: 's31', name: '🏛️ V&A Museum', type: 'museum', tags: ['Museum', 'Free'], desc: 'Right next to Natural History — fashion, design, art. The cast courts (plaster casts of monuments) are jaw-dropping. Free, and the courtyard café is lovely.', price: 'FREE', map: 'https://maps.google.com/maps?q=Victoria+and+Albert+Museum+SW7+2RL' },
+      { id: 's32', name: '🛍️ Portobello Road Market', type: 'shopping', tags: ['Shopping', 'Free'], desc: 'Famous for antiques (Fri is main day!), vintage fashion, and the colourful pastel houses. Great for last-minute unique souvenirs. Notting Hill charm.', price: 'Free (shopping $$)', map: 'https://maps.google.com/maps?q=Portobello+Road+Market+W11+1LJ' },
+      { id: 's33', name: '🍵 Fortnum & Mason', type: 'shopping', tags: ['Shopping', 'Food'], desc: 'The Queen\'s grocer since 1707. Perfect place for last-minute luxury tea, biscuits, and preserves as gifts. The tea salon is a tradition.', price: 'Free entry; afternoon tea ~£70', map: 'https://maps.google.com/maps?q=Fortnum+and+Mason+W1A+1ER' },
+      { id: 's34', name: '✈️ Heathrow T5', type: 'transit', tags: ['Transit'], desc: 'Aim to arrive by 5pm for 7:20pm flight. Heathrow Express from Paddington: 15 min, £25. Or Piccadilly Line tube: ~50 min, £5.60 (contactless).', price: 'Tube ~£5.60 or Heathrow Express £25', map: 'https://maps.google.com/maps?q=Heathrow+Terminal+5+TW6+2GA' },
+    ],
+    restaurants: [
+      { name: 'The Kensington Palace Café', desc: 'Light lunch near museums, Orangery setting', price: '££' },
+      { name: 'Gordon Ramsay Plane Food', desc: 'Pre-flight dining at T5 (if time allows)', price: '£££' },
+    ]
+  }
+];
+
+const TIPS = [
+  { icon:'🎫', text:'<strong>English Heritage Overseas Pass: £69</strong> — covers 100+ sites for 9 days. Just Warwick Castle (£28) + Stonehenge (£25) alone nearly pays for it. Buy online before departure.' },
+  { icon:'🏰', text:'<strong>National Trust Touring Pass: ~£33</strong> — 7-day pass for overseas visitors. Covers Cotswolds properties, Lake District sites, and stately homes.' },
+  { icon:'🎟️', text:'<strong>Book everything online in advance</strong> — castles and attractions are £3–8 cheaper online. Edinburgh Castle sells out in summer — book minimum 2 weeks ahead.' },
+  { icon:'🏛️', text:'<strong>London museums are FREE</strong> — British Museum, Natural History, V&A, National Gallery, Tate Modern. This saves you £100+ vs paying for attractions.' },
+  { icon:'🚂', text:'<strong>2-for-1 Days Out Guide</strong> — with any National Rail ticket, get 2-for-1 entry at Tower of London, Westminster Abbey, and more. Keep your train ticket! <a href="https://www.daysoutguide.co.uk/" target="_blank">daysoutguide.co.uk</a>' },
+  { icon:'💳', text:'<strong>Use contactless/Oyster for London transport</strong> — daily cap is ~£8.50 (zones 1–2). Never buy paper tickets. Tap the same card all day.' },
+  { icon:'🚗', text:'<strong>Petrol saving</strong> — fill up at supermarket stations (Tesco, Sainsbury\'s) — typically 5–10p/litre cheaper than motorway services. Use Waze for cheapest fuel en route.' },
+  { icon:'🍽️', text:'<strong>Eat at pubs, not restaurants</strong> — pub mains £12–18 vs restaurant £25–40. "Meal deals" at chains like Wetherspoons: burger + drink ~£8. For London, meal deals at Tesco/Boots ~£4–5 for lunch.' },
+  { icon:'🏨', text:'<strong>Accommodation</strong> — Premier Inn / Travelodge are reliable and cheap if booked early (~£40–70/night). Consider university accommodation in summer (Edinburgh, York, London — book via universityrooms.com).' },
+  { icon:'📱', text:'<strong>Get a UK SIM/eSIM</strong> — giffgaff, Three, or EE pay-as-you-go. ~£10–15 for 10–20GB. Or use Airalo eSIM. Essential for Google Maps navigation.' },
+  { icon:'🗺️', text:'<strong>Download offline Google Maps</strong> for all your route areas before the trip. Rural areas (Cotswolds, Northumberland, Lake District) have spotty signal.' },
+  { icon:'🌧️', text:'<strong>Pack layers & waterproof</strong> — UK summer weather is unpredictable. A good waterproof jacket saves £ on indoor-only backup plans. Umbrella + sunglasses.' },
+];
+
+// ── RENDER ────────────────────────────────────
+let selectedSpots = JSON.parse(localStorage.getItem('uk-trip-spots') || '[]');
+
+function renderAll() {
+  renderNav();
+  renderDays();
+  updateFloatingBar();
+}
+
+function renderNav() {
+  const nav = document.getElementById('dayNav');
+  nav.innerHTML = DAYS.map((d,i) =>
+    `<div class="day-pill${i===0?' active':''}" onclick="showDay(${i})">Day ${d.id}</div>`
+  ).join('');
+}
+
+function showDay(idx) {
+  document.querySelectorAll('.day-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.day-pill').forEach(p => p.classList.remove('active'));
+  document.getElementById('day'+idx)?.classList.add('active');
+  document.querySelectorAll('.day-pill')[idx]?.classList.add('active');
+  document.getElementById('day'+idx)?.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function renderDays() {
+  const main = document.getElementById('main');
+  main.innerHTML = DAYS.map((day, di) => `
+    <section class="day-section${di===0?' active':''}" id="day${di}">
+      <div class="day-header">
+        <div class="day-dot" style="background:${day.color}">${day.id}</div>
+        <div>
+          <div class="day-title">${day.title}</div>
+          <div class="day-subtitle">${day.date} · ${day.subtitle}</div>
+        </div>
+      </div>
+
+      <a href="${day.route.map}" target="_blank" class="route-card" style="text-decoration:none;color:inherit;">
+        <span class="route-icon">🗺️</span>
+        <span class="route-text"><strong>${day.route.from}</strong> → <strong>${day.route.to}</strong> · ${day.route.drive}</span>
+      </a>
+
+      <div class="section-label">📍 Sightseeing Spots</div>
+      ${day.spots.map(s => renderSpot(s)).join('')}
+
+      <div class="section-label">🍽️ Food & Restaurants</div>
+      ${day.restaurants.map(r => `
+        <div class="food-card">
+          <div class="food-info">
+            <div class="food-name">${r.name}</div>
+            <div class="food-desc">${r.desc}</div>
+          </div>
+          <div class="food-price">${r.price}</div>
+        </div>
+      `).join('')}
+    </section>
+  `).join('');
+
+  // Money tips section at end
+  const tipsSection = document.createElement('div');
+  tipsSection.className = 'day-section';
+  tipsSection.id = 'tips';
+  tipsSection.innerHTML = `
+    <div class="day-header">
+      <div class="day-dot" style="background:#f0c040">💰</div>
+      <div>
+        <div class="day-title">Money Saving Tips</div>
+        <div class="day-subtitle">12 ways to cut costs on your UK trip</div>
+      </div>
+    </div>
+    ${TIPS.map(t => `
+      <div class="tips-card">
+        <div class="tip-item">
+          <span class="tip-icon">${t.icon}</span>
+          <span class="tip-text">${t.text}</span>
+        </div>
+      </div>
+    `).join('')}
+  `;
+  main.appendChild(tipsSection);
+
+  // Add Tips to nav
+  const nav = document.getElementById('dayNav');
+  const tipsPill = document.createElement('div');
+  tipsPill.className = 'day-pill';
+  tipsPill.textContent = '💰 Tips';
+  tipsPill.onclick = () => showTips();
+  nav.appendChild(tipsPill);
+
+  // Restore selections
+  restoreChecks();
+}
+
+function renderSpot(s) {
+  const checked = selectedSpots.includes(s.id);
+  return `
+    <div class="spot-card${checked?' selected':''}" id="card-${s.id}">
+      <div class="spot-top">
+        <span class="spot-name">${s.name}</span>
+        <div class="spot-check${checked?' checked':''}" onclick="toggleSpot('${s.id}')">${checked?'✓':''}</div>
+      </div>
+      <div class="spot-tags">
+        ${s.tags.map(t => {
+          let cls = 'tag';
+          if (t === 'Free' || t === 'Free-Entry' || t === 'Free-Exterior') cls += ' free';
+          else if (t === 'Paid') cls += ' paid';
+          else if (t === 'Food') cls += ' food';
+          else if (t === 'Must-See') cls += ' must';
+          return `<span class="${cls}">${t}</span>`;
+        }).join('')}
+      </div>
+      <div class="spot-desc">${s.desc}</div>
+      <div class="spot-price">${s.price.startsWith('FREE') || s.price.startsWith('Free') ?
+        '🟢 ' + s.price : '🎟️ ' + s.price}</div>
+      <div class="spot-links">
+        <a href="${s.map}" target="_blank" class="spot-link">📍 Google Maps</a>
+        ${s.web ? `<a href="${s.web}" target="_blank" class="spot-link web">🌐 Website</a>` : ''}
+      </div>
+    </div>
+  `;
+}
+
+function toggleSpot(id) {
+  const idx = selectedSpots.indexOf(id);
+  if (idx > -1) {
+    selectedSpots.splice(idx, 1);
+  } else {
+    selectedSpots.push(id);
+  }
+  localStorage.setItem('uk-trip-spots', JSON.stringify(selectedSpots));
+  restoreChecks();
+  updateFloatingBar();
+}
+
+function restoreChecks() {
+  document.querySelectorAll('.spot-check').forEach(el => {
+    const card = el.closest('.spot-card');
+    if (!card) return;
+    const id = card.id.replace('card-', '');
+    const checked = selectedSpots.includes(id);
+    el.classList.toggle('checked', checked);
+    el.textContent = checked ? '✓' : '';
+    card.classList.toggle('selected', checked);
+  });
+}
+
+function updateFloatingBar() {
+  document.getElementById('floatCount').textContent = selectedSpots.length + ' spot' + (selectedSpots.length!==1?'s':'');
+}
+
+function showTips() {
+  document.querySelectorAll('.day-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.day-pill').forEach(p => p.classList.remove('active'));
+  document.getElementById('tips').classList.add('active');
+  const nav = document.getElementById('dayNav');
+  nav.querySelectorAll('.day-pill')[nav.querySelectorAll('.day-pill').length-1].classList.add('active');
+  document.getElementById('tips').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function openSummary() {
+  const modal = document.getElementById('modal');
+  const list = document.getElementById('modalList');
+  const totalEl = document.getElementById('modalTotal');
+
+  if (selectedSpots.length === 0) {
+    list.innerHTML = '<p style="color:var(--muted);font-size:0.82rem;">Tap the checkboxes on spot cards to add them here.</p>';
+    totalEl.style.display = 'none';
+  } else {
+    // Collect all spots
+    const allSpots = {};
+    DAYS.forEach(d => d.spots.forEach(s => allSpots[s.id] = s));
+    list.innerHTML = selectedSpots.map(id => {
+      const s = allSpots[id];
+      return s ? `<div class="modal-item"><span>${s.name}</span><span style="font-size:0.72rem;color:var(--muted)">${s.price.split('.')[0]}</span><span class="modal-remove" onclick="event.stopPropagation();toggleSpot('${id}');openSummary();">Remove</span></div>` : '';
+    }).join('');
+    list.innerHTML += `<div style="margin-top:8px;font-size:0.72rem;color:var(--muted)">💡 Save this page — your selections are saved in your browser.</div>`;
+    totalEl.style.display = 'block';
+    totalEl.innerHTML = `Total spots selected: <strong>${selectedSpots.length}</strong> · Tap spots to add/remove`;
+  }
+  modal.classList.add('show');
+}
+
+function closeSummary() {
+  document.getElementById('modal').classList.remove('show');
+  renderDays(); // re-render to reflect any removals
+  updateFloatingBar();
+}
+
+// Close modal on overlay click
+document.addEventListener('click', function(e) {
+  if (e.target.id === 'modal') closeSummary();
+});
+
+// Init
+renderAll();
+</script>
+</body>
+</html>
