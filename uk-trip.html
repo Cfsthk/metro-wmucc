@@ -237,6 +237,37 @@ main { padding: 12px 10px 80px; }
 .food-name { font-weight: 600; font-size: 0.85rem; }
 .food-desc { font-size: 0.7rem; color: var(--muted); }
 .food-price { font-size: 0.72rem; font-weight: 600; color: var(--accent2); }
+.food-rating { font-size: 0.65rem; color: #d4a017; margin-top: 2px; }
+.food-type { font-size: 0.65rem; background: #f0e6d3; border-radius: 8px; padding: 1px 6px; display: inline-block; margin-top: 3px; color: var(--accent); }
+
+/* --- ACCOMMODATION CARD --- */
+.sleep-card {
+  background: var(--card);
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+}
+.sleep-info { flex: 1; }
+.sleep-name { font-weight: 600; font-size: 0.82rem; }
+.sleep-desc { font-size: 0.68rem; color: var(--muted); margin-top: 2px; }
+.sleep-price { font-size: 0.72rem; font-weight: 600; color: var(--accent2); white-space: nowrap; }
+.sleep-link {
+  font-size: 0.65rem;
+  padding: 3px 8px;
+  border-radius: 12px;
+  background: var(--accent);
+  color: #fff;
+  text-decoration: none;
+  display: inline-block;
+  margin-top: 4px;
+}
+.sleep-type { font-size: 0.62rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.03em; }
 
 /* --- FLOATING BAR --- */
 .floating-bar {
@@ -390,10 +421,17 @@ const DAYS = [
       { id: 's4', name: '⛪ Coventry Cathedral', type: 'heritage', tags: ['Heritage', 'Free'], desc: 'Stunning contrast of the bombed-out medieval ruins and the modern 1962 cathedral. Powerful symbol of reconciliation. 20 min from Rugby.', price: 'Free (suggested donation £5)', map: 'https://maps.google.com/maps?q=Coventry+Cathedral+CV1+5FB' },
     ],
     restaurants: [
-      { name: 'The Merchants Inn', desc: 'Traditional British pub, best Sunday roast in Rugby', price: '££' },
-      { name: 'La Casa Loco', desc: 'Excellent tapas, lively atmosphere', price: '££' },
-      { name: 'The Fourteas', desc: '1940s-themed tea room near Shakespeare\'s Birthplace, Stratford', price: '£' },
-      { name: 'The Old Thatch Tavern', desc: 'Oldest pub in Stratford (~1470), proper ales', price: '££' },
+      { name: 'The Merchants Inn', desc: 'Best Sunday roast in Rugby — proper carvery', price: '££', rating: '⭐ 4.4', type: '🇬🇧 British Pub' },
+      { name: 'La Casa Loco', desc: 'Excellent tapas & cocktails, lively atmosphere', price: '££', rating: '⭐ 4.6', type: '🇪🇸 Spanish' },
+      { name: 'Brownsover Fish Bar', desc: 'Award-winning fish & chips — local institution', price: '£', rating: '⭐ 4.5', type: '🇬🇧 Fish & Chips' },
+      { name: 'The Fourteas', desc: '1940s-themed tea room, Stratford — scones & sandwiches', price: '£', rating: '⭐ 4.6', type: '☕ Tea Room' },
+      { name: 'The Old Thatch Tavern', desc: 'Oldest pub in Stratford (~1470), proper ales & pies', price: '££', rating: '⭐ 4.3', type: '🇬🇧 Historic Pub' },
+      { name: 'Oki Sushi & Bento', desc: 'Good Japanese in Rugby for a change from pub food', price: '££', rating: '⭐ 4.3', type: '🍣 Japanese' },
+    ],
+    sleep: [
+      { name: 'Premier Inn Rugby North', desc: 'Reliable chain — clean, comfy beds, free parking. Book 3+ weeks ahead for best rate.', price: '£42–58', map: 'https://maps.google.com/maps?q=Premier+Inn+Rugby+North+CV21+1SR', type: '🏨 Budget Chain' },
+      { name: 'Travelodge Rugby Central', desc: 'Basic but clean, 5 min walk to station/town. Cheapest option in Rugby.', price: '£30–48', map: 'https://maps.google.com/maps?q=Travelodge+Rugby+Central+CV21+2JT', type: '🏨 Budget Chain' },
+      { name: 'Draycote Hotel', desc: 'Peaceful location by Draycote Water, free parking, decent restaurant.', price: '£55–72', map: 'https://maps.google.com/maps?q=Draycote+Hotel+Rugby+CV23+9LF', type: '🏨 Mid-Range' },
     ]
   },
   {
@@ -407,9 +445,17 @@ const DAYS = [
       { id: 's8', name: '🏴󠁧󠁢󠁳󠁣󠁴󠁿 Gretna Green', type: 'stop', tags: ['Heritage', 'Free', 'Stop'], desc: 'Famous wedding village right at the Scotland-England border. Quick photo stop at the Old Blacksmith\'s Shop — centuries of runaway wedding history.', price: 'Free (museum £5 optional)', map: 'https://maps.google.com/maps?q=Gretna+Green+DG16+5EA' },
     ],
     restaurants: [
-      { name: 'The Old Manse Hotel', desc: 'Riverside pub in Bourton, Cotswolds classics', price: '££' },
-      { name: 'The Angel at Hetton', desc: 'Legendary gastropub en route (Michelin-mentioned)', price: '£££' },
-      { name: 'The Patterdale Hotel Bar', desc: 'Quick pub lunch near Ullswater, Lake District', price: '£' },
+      { name: 'The Old Manse Hotel', desc: 'Riverside pub in Bourton, Cotswold classics', price: '££', rating: '⭐ 4.2', type: '🇬🇧 Gastropub' },
+      { name: 'The Rose Tree', desc: 'Charming riverside tea garden in Bourton', price: '£', rating: '⭐ 4.5', type: '☕ Tea Garden' },
+      { name: 'The Angel at Hetton', desc: 'Michelin-mentioned gastropub (Yorkshire Dales detour)', price: '£££', rating: '⭐ 4.7', type: '🏅 Fine Gastropub' },
+      { name: 'Boardwalk Bar & Grill', desc: 'Lakeside dining at Bowness, fish specials & views', price: '££', rating: '⭐ 4.3', type: '🐟 Lakeside' },
+      { name: 'Ubiquitous Chip', desc: 'Glasgow institution — Scottish produce, leafy courtyard', price: '£££', rating: '⭐ 4.6', type: '🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scottish Fine' },
+      { name: 'Mother India', desc: 'Legendary Glasgow curry house, tapas-style Indian', price: '££', rating: '⭐ 4.7', type: '🍛 Indian' },
+    ],
+    sleep: [
+      { name: 'Premier Inn Glasgow City Centre', desc: 'Buchanan Galleries — central, reliable, family rooms available', price: '£48–68', map: 'https://maps.google.com/maps?q=Premier+Inn+Glasgow+City+Centre+G2+3JD', type: '🏨 Budget Chain' },
+      { name: 'YHA Glasgow', desc: 'Modern hostel near Kelvingrove — private rooms from £45', price: '£18–55', map: 'https://maps.google.com/maps?q=YHA+Glasgow+G3+6BY', type: '🏠 Hostel' },
+      { name: 'ibis budget Glasgow', desc: 'No-frills clean rooms, 10 min walk to city centre', price: '£35–50', map: 'https://maps.google.com/maps?q=ibis+budget+Glasgow+G2+4SQ', type: '🏨 Budget' },
     ]
   },
   {
@@ -425,11 +471,19 @@ const DAYS = [
       { id: 's14', name: '🌄 Arthur\'s Seat', type: 'scenery', tags: ['Scenery', 'Free', 'Must-See'], desc: 'Extinct volcano in Holyrood Park. A 45-min hike rewards you with the best panoramic view of Edinburgh, the Forth, and Fife. Sunset hike is magical.', price: 'FREE', map: 'https://maps.google.com/maps?q=Arthur+Seat+Edinburgh+EH8+8AZ' },
     ],
     restaurants: [
-      { name: 'Ubiquitous Chip', desc: 'Glasgow institution — Scottish produce, leafy courtyard', price: '£££' },
-      { name: 'The Willow Tea Rooms', desc: 'Charles Rennie Mackintosh-designed, Glasgow (lunch/tea)', price: '££' },
-      { name: 'The Witchery by the Castle', desc: 'Ultimate Edinburgh fine dining, gothic setting', price: '££££' },
-      { name: 'Oink', desc: 'Legendary hog roast rolls on Victoria Street (cheap eat)', price: '£' },
-      { name: 'The Dome', desc: 'Spectacular Georgian building, afternoon tea or dinner', price: '£££' },
+      { name: 'Ubiquitous Chip', desc: 'Glasgow institution — Scottish produce, leafy courtyard', price: '£££', rating: '⭐ 4.6', type: '🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scottish Fine' },
+      { name: 'The Willow Tea Rooms', desc: 'Mackintosh-designed, Glasgow — superb lunch/tea', price: '££', rating: '⭐ 4.4', type: '☕ Tea Room' },
+      { name: 'Paesano Pizza', desc: 'Best Neapolitan pizza in Glasgow, £7–9, huge portions', price: '£', rating: '⭐ 4.6', type: '🍕 Pizza' },
+      { name: 'The Witchery by the Castle', desc: 'Ultimate Edinburgh fine dining, gothic candlelit setting', price: '££££', rating: '⭐ 4.5', type: '🏰 Fine Dining' },
+      { name: 'Oink', desc: 'Legendary hog roast rolls on Victoria Street — £5–7', price: '£', rating: '⭐ 4.7', type: '🥪 Street Food' },
+      { name: 'The Dome', desc: 'Spectacular Georgian hall, afternoon tea or dinner', price: '£££', rating: '⭐ 4.4', type: '🏛️ Grand Dining' },
+      { name: 'Mussel Inn', desc: 'Fresh Scottish shellfish, Rose Street — 1kg mussels £10', price: '££', rating: '⭐ 4.5', type: '🦪 Seafood' },
+    ],
+    sleep: [
+      { name: 'Premier Inn Edinburgh City Centre', desc: 'Royal Mile location — book EARLY, summer sells out fast', price: '£75–120', map: 'https://maps.google.com/maps?q=Premier+Inn+Edinburgh+Royal+Mile+EH1+1SG', type: '🏨 Budget Chain' },
+      { name: 'Travelodge Edinburgh Central', desc: 'Basic but unbeatable location near Royal Mile', price: '£55–85', map: 'https://maps.google.com/maps?q=Travelodge+Edinburgh+Central+EH1+2EN', type: '🏨 Budget Chain' },
+      { name: 'Safestay Edinburgh', desc: 'Stylish hostel in Old Town — private doubles ~£55', price: '£20–65', map: 'https://maps.google.com/maps?q=Safestay+Edinburgh+EH1+1RF', type: '🏠 Hostel' },
+      { name: 'Premier Inn Stirling', desc: '💡 Cheaper alternative — 40 min drive from Edinburgh, save £30+', price: '£38–55', map: 'https://maps.google.com/maps?q=Premier+Inn+Stirling+FK9+4AD', type: '🏨 Budget Nearby' },
     ]
   },
   {
@@ -443,9 +497,17 @@ const DAYS = [
       { id: 's18', name: '🏙️ York', type: 'heritage', tags: ['Heritage', 'Shopping', 'Must-See'], desc: 'Walk the medieval Shambles (Diagon Alley vibes), visit York Minster — the largest Gothic cathedral in Northern Europe — and the city walls. Great for afternoon tea and shopping.', price: 'York Minster ~£16; walking the walls free', map: 'https://maps.google.com/maps?q=York+Minster+YO1+7HH' },
     ],
     restaurants: [
-      { name: 'The Treehouse Restaurant', desc: 'Magical treetop dining at Alnwick Garden', price: '£££' },
-      { name: 'Bettys Café Tea Rooms', desc: 'Iconic Yorkshire tea room in York since 1919', price: '££' },
-      { name: 'The Star Inn The City', desc: 'Modern Yorkshire food by the River Ouse', price: '£££' },
+      { name: 'The Treehouse Restaurant', desc: 'Magical treetop dining at Alnwick Garden', price: '£££', rating: '⭐ 4.3', type: '🌳 Unique Dining' },
+      { name: 'The Joiners Arms', desc: 'Cosy pub in Newton-by-the-Sea, great crab sandwiches', price: '££', rating: '⭐ 4.5', type: '🦀 Coastal Pub' },
+      { name: 'The Cellar Door', desc: 'Modern British in Durham — great pre-fixe lunch £19', price: '££', rating: '⭐ 4.6', type: '🇬🇧 Modern British' },
+      { name: 'Bettys Café Tea Rooms', desc: 'Iconic Yorkshire tea room in York since 1919 — Fat Rascal scones', price: '££', rating: '⭐ 4.5', type: '☕ Tea Room' },
+      { name: 'The Star Inn The City', desc: 'Modern Yorkshire food by River Ouse, York', price: '£££', rating: '⭐ 4.4', type: '🏴󠁧󠁢󠁥󠁮󠁧󠁿 Yorkshire' },
+      { name: 'Shambles Kitchen', desc: 'Pulled pork sandwiches on the Shambles, quick & cheap', price: '£', rating: '⭐ 4.7', type: '🥪 Street Food' },
+    ],
+    sleep: [
+      { name: 'Premier Inn Rugby North', desc: 'Same as Night 1 — reliable clean option, free parking', price: '£42–58', map: 'https://maps.google.com/maps?q=Premier+Inn+Rugby+North+CV21+1SR', type: '🏨 Budget Chain' },
+      { name: 'Travelodge Rugby Central', desc: 'Budget option in town, late check-in fine', price: '£30–48', map: 'https://maps.google.com/maps?q=Travelodge+Rugby+Central+CV21+2JT', type: '🏨 Budget Chain' },
+      { name: 'ibis Rugby East', desc: 'Just off M1 J18 — convenient if arriving late from Yorkshire', price: '£38–52', map: 'https://maps.google.com/maps?q=ibis+Rugby+East+CV23+0XF', type: '🏨 Budget Chain' },
     ]
   },
   {
@@ -460,9 +522,17 @@ const DAYS = [
       { id: 's23', name: '🖼️ National Gallery', type: 'museum', tags: ['Museum', 'Free'], desc: 'Trafalgar Square — world-class collection from da Vinci to Van Gogh. Free entry.' , price: 'FREE', map: 'https://maps.google.com/maps?q=National+Gallery+WC2N+5DN' },
     ],
     restaurants: [
-      { name: 'Dishoom Covent Garden', desc: 'Bombay-style café, legendary black daal', price: '££' },
-      { name: 'Flat Iron', desc: 'Great steak for ~£14, multiple London locations', price: '££' },
-      { name: 'Borough Market (preview)', desc: 'Food lover\'s paradise — save for Day 6 lunch', price: '£–££' },
+      { name: 'Dishoom Covent Garden', desc: 'Bombay-style café, legendary black daal, bacon naan', price: '££', rating: '⭐ 4.6', type: '🍛 Indian' },
+      { name: 'Flat Iron', desc: 'No-frills great steak for ~£14, multiple locations', price: '££', rating: '⭐ 4.5', type: '🥩 Steak' },
+      { name: 'Padella', desc: 'Fresh pasta, Borough Market — legendary pappardelle', price: '£', rating: '⭐ 4.6', type: '🍝 Italian' },
+      { name: 'Lanzhou Lamian', desc: 'Hand-pulled noodles near British Museum — authentic & cheap', price: '£', rating: '⭐ 4.4', type: '🍜 Chinese' },
+      { name: 'Regency Café', desc: 'Classic "greasy spoon" — full English breakfast from £7', price: '£', rating: '⭐ 4.6', type: '🍳 British Café' },
+    ],
+    sleep: [
+      { name: 'Premier Inn London County Hall', desc: 'Next to London Eye — best value central location', price: '£75–110', map: 'https://maps.google.com/maps?q=Premier+Inn+London+County+Hall+SE1+7PB', type: '🏨 Budget Chain' },
+      { name: 'YHA London St Paul\'s', desc: 'Steps from St Paul\'s — private rooms from £59', price: '£25–75', map: 'https://maps.google.com/maps?q=YHA+London+St+Pauls+EC4V+2AD', type: '🏠 Hostel' },
+      { name: 'Travelodge London Central City Road', desc: 'Zone 1 budget — walk to Tower/Borough', price: '£50–85', map: 'https://maps.google.com/maps?q=Travelodge+London+City+Road+EC1Y+1AG', type: '🏨 Budget Chain' },
+      { name: 'LSE Vacations (university)', desc: '💡 University dorms in summer — Bloomsbury/Holborn, en-suite from £42', price: '£42–65', map: 'https://maps.google.com/maps?q=LSE+London+WC2A+2AE', type: '🎓 Uni Summer' },
     ]
   },
   {
@@ -478,10 +548,17 @@ const DAYS = [
       { id: 's29', name: '🌇 Sky Garden', type: 'scenery', tags: ['Scenery', 'Free', 'Must-See'], desc: 'Free indoor garden with 360° views from the Walkie-Talkie building. Must book free tickets online weeks in advance (released Mondays). Sunset slot is prime. Backup: The Garden at 120 (no booking needed).', price: 'FREE (book online in advance)', map: 'https://maps.google.com/maps?q=Sky+Garden+EC3M+8AF', web: 'https://skygarden.london/' },
     ],
     restaurants: [
-      { name: 'Padella', desc: 'Fresh pasta, Borough Market area, queues but worth it', price: '£' },
-      { name: 'Dishoom Shoreditch', desc: 'If you missed it Day 5 — excellent Indian', price: '££' },
-      { name: 'Hawksmoor Seven Dials', desc: 'Best Sunday roast / steak in Covent Garden', price: '£££' },
-      { name: 'Bao Soho', desc: 'Taiwanese steamed buns, excellent and affordable', price: '£' },
+      { name: 'Padella', desc: 'Fresh pasta at Borough Market — usually a queue, worth it', price: '£', rating: '⭐ 4.6', type: '🍝 Italian' },
+      { name: 'Bao Soho', desc: 'Taiwanese steamed buns — excellent, affordable, trendy', price: '£', rating: '⭐ 4.5', type: '🥟 Taiwanese' },
+      { name: 'Dishoom Shoreditch', desc: 'Same legendary Bombay café as Day 5 — always great', price: '££', rating: '⭐ 4.6', type: '🍛 Indian' },
+      { name: 'Hawksmoor Seven Dials', desc: 'Best steak/roast in Covent Garden — Sunday roast £25', price: '£££', rating: '⭐ 4.6', type: '🥩 Steakhouse' },
+      { name: 'Poppie\'s Fish & Chips', desc: 'Best fish & chips in London, Spitalfields — proper East End', price: '££', rating: '⭐ 4.4', type: '🇬🇧 Fish & Chips' },
+      { name: 'Brick Lane Beigel Bake', desc: '24h salt beef bagels — London institution, ~£5', price: '£', rating: '⭐ 4.6', type: '🥯 Bagels' },
+    ],
+    sleep: [
+      { name: 'Premier Inn London County Hall', desc: 'Same as Night 5 — consistent, safe, great location', price: '£75–110', map: 'https://maps.google.com/maps?q=Premier+Inn+London+County+Hall+SE1+7PB', type: '🏨 Budget Chain' },
+      { name: 'YHA London St Paul\'s', desc: 'Clean hostel near landmarks, lockers provided', price: '£25–75', map: 'https://maps.google.com/maps?q=YHA+London+St+Pauls+EC4V+2AD', type: '🏠 Hostel' },
+      { name: 'easyHotel London Victoria', desc: '💡 Cheapest private room in Zone 1 — tiny but clean, from £35', price: '£35–55', map: 'https://maps.google.com/maps?q=easyHotel+London+Victoria+SW1V+1EQ', type: '🏨 Ultra-Budget' },
     ]
   },
   {
@@ -496,9 +573,12 @@ const DAYS = [
       { id: 's34', name: '✈️ Heathrow T5', type: 'transit', tags: ['Transit'], desc: 'Aim to arrive by 5pm for 7:20pm flight. Heathrow Express from Paddington: 15 min, £25. Or Piccadilly Line tube: ~50 min, £5.60 (contactless).', price: 'Tube ~£5.60 or Heathrow Express £25', map: 'https://maps.google.com/maps?q=Heathrow+Terminal+5+TW6+2GA' },
     ],
     restaurants: [
-      { name: 'The Kensington Palace Café', desc: 'Light lunch near museums, Orangery setting', price: '££' },
-      { name: 'Gordon Ramsay Plane Food', desc: 'Pre-flight dining at T5 (if time allows)', price: '£££' },
-    ]
+      { name: 'The Orangery at Kensington Palace', desc: 'Elegant light lunch near museums, garden setting', price: '££', rating: '⭐ 4.3', type: '🌿 Garden Café' },
+      { name: 'Murger Han', desc: 'Authentic Xi\'an noodle near Euston — biang biang noodles', price: '£', rating: '⭐ 4.4', type: '🍜 Chinese' },
+      { name: 'Gordon Ramsay Plane Food', desc: 'Pre-flight dining at T5 — if time allows', price: '£££', rating: '⭐ 4.0', type: '✈️ Airport' },
+      { name: 'itsu / Pret A Manger', desc: 'Quick grab-and-go sushi/sandwiches at T5 if rushing', price: '£', rating: '⭐ 3.8', type: '🥪 Grab & Go' },
+    ],
+    sleep: []
   }
 ];
 
@@ -511,7 +591,9 @@ const TIPS = [
   { icon:'💳', text:'<strong>Use contactless/Oyster for London transport</strong> — daily cap is ~£8.50 (zones 1–2). Never buy paper tickets. Tap the same card all day.' },
   { icon:'🚗', text:'<strong>Petrol saving</strong> — fill up at supermarket stations (Tesco, Sainsbury\'s) — typically 5–10p/litre cheaper than motorway services. Use Waze for cheapest fuel en route.' },
   { icon:'🍽️', text:'<strong>Eat at pubs, not restaurants</strong> — pub mains £12–18 vs restaurant £25–40. "Meal deals" at chains like Wetherspoons: burger + drink ~£8. For London, meal deals at Tesco/Boots ~£4–5 for lunch.' },
-  { icon:'🏨', text:'<strong>Accommodation</strong> — Premier Inn / Travelodge are reliable and cheap if booked early (~£40–70/night). Consider university accommodation in summer (Edinburgh, York, London — book via universityrooms.com).' },
+  { icon:'🏨', text:'<strong>Accommodation</strong> — Premier Inn / Travelodge are reliable and cheap if booked early (~£35–70/night). Consider university accommodation in summer (Edinburgh, York, London — book via universityrooms.com).' },
+  { icon:'🏠', text:'<strong>Premier Inn Saver rates</strong> — book 3+ weeks ahead for £35–45 rooms. Flexible rates allow free cancellation. Travelodge saver rooms from £30 if booked 21+ days ahead. Always book direct, not via Booking.com.' },
+  { icon:'🎓', text:'<strong>University summer accommodation</strong> — LSE, Imperial, UCL in London rent dorm rooms June–Sept. Private en-suite from £42/night in central London. Check <a href=\"https://universityrooms.com\" target=\"_blank\">universityrooms.com</a>. Edinburgh Uni, York Uni also available.' },
   { icon:'📱', text:'<strong>Get a UK SIM/eSIM</strong> — giffgaff, Three, or EE pay-as-you-go. ~£10–15 for 10–20GB. Or use Airalo eSIM. Essential for Google Maps navigation.' },
   { icon:'🗺️', text:'<strong>Download offline Google Maps</strong> for all your route areas before the trip. Rural areas (Cotswolds, Northumberland, Lake District) have spotty signal.' },
   { icon:'🌧️', text:'<strong>Pack layers & waterproof</strong> — UK summer weather is unpredictable. A good waterproof jacket saves £ on indoor-only backup plans. Umbrella + sunglasses.' },
@@ -565,12 +647,28 @@ function renderDays() {
       ${day.restaurants.map(r => `
         <div class="food-card">
           <div class="food-info">
-            <div class="food-name">${r.name}</div>
+            <div class="food-name">${r.name} <span class="food-rating">${r.rating||''}</span></div>
             <div class="food-desc">${r.desc}</div>
+            ${r.type ? `<span class="food-type">${r.type}</span>` : ''}
           </div>
           <div class="food-price">${r.price}</div>
         </div>
       `).join('')}
+
+      ${day.sleep && day.sleep.length > 0 ? `
+      <div class="section-label">🏨 Where to Stay</div>
+      ${day.sleep.map(s => `
+        <div class="sleep-card">
+          <div class="sleep-info">
+            <div class="sleep-name">${s.name}</div>
+            <div class="sleep-desc">${s.desc}</div>
+            ${s.type ? `<div class="sleep-type">${s.type}</div>` : ''}
+            ${s.map ? `<a href="${s.map}" target="_blank" class="sleep-link">📍 View on Map</a>` : ''}
+          </div>
+          <div class="sleep-price">${s.price}</div>
+        </div>
+      `).join('')}
+      ` : ''}
     </section>
   `).join('');
 
@@ -583,7 +681,7 @@ function renderDays() {
       <div class="day-dot" style="background:#f0c040">💰</div>
       <div>
         <div class="day-title">Money Saving Tips</div>
-        <div class="day-subtitle">12 ways to cut costs on your UK trip</div>
+        <div class="day-subtitle">14 ways to cut costs on your UK trip</div>
       </div>
     </div>
     ${TIPS.map(t => `
