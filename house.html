@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Metro · House Info</title>
+<style>
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  :root {
+    --bg:#fafafa; --card:#fff; --text:#1a1a1a; --muted:#6b6b6b;
+    --subtle:#e5e5e5; --accent:#cc2233; --accent-dim:#fce4e6;
+    --green:#1a8a4a; --radius:10px; --shadow:0 1px 3px rgba(0,0,0,0.06);
+  }
+  html { font-size:15px; -webkit-font-smoothing:antialiased; }
+  body {
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    background:var(--bg); color:var(--text); line-height:1.5;
+    min-height:100vh; max-width:500px; margin:0 auto;
+  }
+  header { padding:24px 16px 8px; display:flex; align-items:center; gap:10px; }
+  header .dot { width:11px; height:11px; border-radius:50%; background:var(--accent); flex-shrink:0; }
+  header h1 { font-size:1.1rem; font-weight:700; }
+  header span { color:var(--muted); font-size:0.75rem; font-weight:500; display:block; }
+  .back-link { display:inline-block; padding:0 16px; font-size:0.75rem; color:var(--accent); font-weight:600; text-decoration:none; margin-bottom:4px; }
+  main { padding:8px 14px 64px; }
+
+  .tab-row {
+    display:flex; gap:0; padding:0 10px;
+    border-bottom:1px solid var(--subtle); margin-bottom:14px;
+    overflow-x:auto; scrollbar-width:none;
+  }
+  .tab-row::-webkit-scrollbar { display:none; }
+  .tab-row button {
+    flex:0 0 auto; font:inherit; font-size:0.65rem; font-weight:700;
+    text-transform:uppercase; letter-spacing:0.3px;
+    padding:10px 7px; background:none; border:none;
+    border-bottom:3px solid transparent;
+    color:var(--muted); cursor:pointer; transition:0.15s; white-space:nowrap;
+  }
+  .tab-row button.active { color:var(--accent); border-bottom-color:var(--accent); }
+  .cat-section { display:none; }
+  .cat-section.active { display:block; }
+
+  h2 { font-size:0.8rem; color:var(--accent); text-transform:uppercase; letter-spacing:0.5px; margin:16px 0 8px; }
+
+  .info-card {
+    background:var(--card); border:1px solid var(--subtle);
+    border-radius:var(--radius); padding:14px; margin-bottom:10px;
+    box-shadow:var(--shadow);
+  }
+  .info-card h3 { font-size:0.9rem; font-weight:700; margin-bottom:2px; }
+  .info-card .dist { font-size:0.7rem; color:var(--green); font-weight:600; margin-bottom:4px; }
+  .info-card .desc { font-size:0.78rem; color:var(--muted); line-height:1.5; margin-bottom:2px; }
+  .info-card .phone { font-size:0.72rem; color:var(--muted); }
+  .info-card .price { font-size:0.7rem; color:var(--accent); font-weight:700; margin-top:2px; }
+  .info-card .addr { font-size:0.72rem; margin-top:4px; }
+  .info-card .addr a { color:var(--accent); text-decoration:none; font-weight:600; }
+
+  .emergency { border-left:3px solid var(--accent); }
+  .emergency h3 { color:var(--accent); }
+
+  .warn-box {
+    background:#fef3c7; border:1px solid #fcd34d; border-radius:var(--radius);
+    padding:12px 14px; margin-bottom:10px; font-size:0.82rem; font-weight:600;
+  }
+  ul.bullets { padding-left:16px; font-size:0.8rem; color:var(--muted); margin-bottom:8px; }
+  ul.bullets li { margin-bottom:2px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="dot"></div>
+  <div><h1>House Info</h1><span>Aztec House · 66 Atlantic Way, Derby DE24 1AB</span></div>
+</header>
+<a href="index.html" class="back-link">← Back to schedule</a>
+
+<div class="tab-row">
+  <button class="active" onclick="switchCat('all')">All</button>
+  <button onclick="switchCat('emergency')">🚨 Emergency</button>
+  <button onclick="switchCat('house')">🏠 House</button>
+  <button onclick="switchCat('pubs')">🍺 Pubs</button>
+  <button onclick="switchCat('food')">🍽 Food</button>
+  <button onclick="switchCat('shopping')">🛍 Shopping</button>
+</div>
+
+<main>
+
+<!-- ═══════════ EMERGENCY ═══════════ -->
+<div class="cat-section active" data-cat="all emergency">
+<h2>🚨 Emergency</h2>
+
+<div class="info-card emergency">
+  <h3>Royal Derby Hospital</h3>
+  <div class="desc">24-hour walk-in emergency department.</div>
+  <div class="phone">📞 (01332) 340131</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Royal+Derby+Hospital+Uttoxeter+Road+DE22+3NE" target="_blank">Uttoxeter Road, Derby DE22 3NE</a></div>
+</div>
+
+<div class="info-card emergency">
+  <h3>Lloyds Pharmacy (Sainsbury's)</h3>
+  <div class="desc">Minor injuries, illness, prescriptions, travel advice. 1.2 miles from house.</div>
+  <div class="phone">📞 (01332) 677841</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Lloyds+Pharmacy+Wyvern+Way+Derby+DE21+6NZ" target="_blank">Wyvern Way, Derby DE21 6NZ</a></div>
+</div>
+
+<div class="warn-box">⚠️ <strong>Gas Emergency:</strong> 0800 111 999<br>Call immediately if you smell gas or suspect a leak.</div>
+
+<div class="warn-box">⚡ <strong>Power Cut:</strong> 0800 917 7953<br>General enquiries: 0800 0328 302 (Mon-Fri 9am-5pm)</div>
+</div>
+
+<!-- ═══════════ HOUSE ═══════════ -->
+<div class="cat-section active" data-cat="all house">
+<h2>🏠 Around the House</h2>
+
+<div class="info-card">
+  <h3>Wi-Fi</h3>
+  <div class="desc">Network name and password will be sent on arrival day along with the lock box code.</div>
+</div>
+
+<div class="info-card">
+  <h3>Television</h3>
+  <div class="desc">Use the remote control to turn on.</div>
+</div>
+
+<div class="info-card">
+  <h3>Heating</h3>
+  <div class="desc">Thermostat on the wall in the main hallway. Control panel under the boiler cupboard in the kitchen. Press Heating/Hot Water Advance Buttons to cycle between off/timed/once/on.</div>
+</div>
+
+<div class="info-card">
+  <h3>Appliances</h3>
+  <div class="desc">Washing machine & dishwasher tablets in the welcome basket. Full appliance instructions at the end of the guidebook.</div>
+</div>
+
+<div class="info-card">
+  <h3>Cleaning & Laundry</h3>
+  <div class="desc">Vacuum cleaner in hallway coat cupboard. Iron under kitchen sink. Ironing board, clothes airer, mop and sweeping brush in hallway coat cupboard.</div>
+</div>
+
+<h2>🗑 Waste & Recycling</h2>
+<div class="info-card">
+  <h3>Collection Day</h3>
+  <div class="desc">Friday morning, approx 6:30am. Put wheelie bins on the curbside in front of the property.</div>
+</div>
+
+<div class="info-card">
+  <h3>Black Bin — Non-recyclable</h3>
+  <ul class="bullets">
+    <li>Crisp packets, black bin liners, food waste</li>
+    <li>Nappies, polystyrene, bubble wrap</li>
+    <li>Utensils, tools, sharp objects</li>
+    <li>Black plastic food trays, light bulbs, batteries</li>
+  </ul>
+</div>
+
+<div class="info-card">
+  <h3>Blue Bin — Mixed Recycling</h3>
+  <ul class="bullets">
+    <li>Food & drinks cans, steel cans, bottle tops</li>
+    <li>Empty aerosol cans</li>
+    <li>Boxes, card sleeves, card packaging, egg boxes</li>
+    <li>Waxed cartons</li>
+    <li>Bottles & jars (all colours)</li>
+    <li>Plastic drinks bottles, yogurt pots</li>
+    <li>Shower/bath/cleaning bottles</li>
+    <li>Light coloured food trays</li>
+  </ul>
+  <div class="desc">A mixed recycling box is in the bottom kitchen drawer — empty into the blue wheelie bin before collection.</div>
+</div>
+</div>
+
+<!-- ═══════════ PUBS ═══════════ -->
+<div class="cat-section active" data-cat="all pubs">
+<h2>🍺 Local Pubs</h2>
+
+<div class="info-card"><h3>Navigation Inn</h3><div class="dist">0.3 miles</div><div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=805+London+Road+Derby+DE24+8UU" target="_blank">805 London Road, DE24 8UU</a></div></div>
+<div class="info-card"><h3>Merlin</h3><div class="dist">0.5 miles</div><div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=1+Orient+Way+Derby+DE24+8BY" target="_blank">1 Orient Way, DE24 8BY</a></div></div>
+<div class="info-card"><h3>The Coronation</h3><div class="dist">0.9 miles</div><div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Baker+Street+Derby+DE34+8SL" target="_blank">Baker Street, DE34 8SL</a></div></div>
+<div class="info-card"><h3>Station Inn</h3><div class="dist">1.2 miles</div><div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=12+Midland+Road+Derby+DE1+2SN" target="_blank">12 Midland Road, DE1 2SN</a></div></div>
+<div class="info-card"><h3>The Merry Widows</h3><div class="dist">1.4 miles</div><div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=24+Railway+Terrace+Derby+DE1+2RU" target="_blank">24 Railway Terrace, DE1 2RU</a></div></div>
+<div class="info-card"><h3>The Blue Peter</h3><div class="dist">1.5 miles</div><div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Shardlow+Road+Derby+DE24+0JH" target="_blank">Shardlow Road, DE24 0JH</a></div></div>
+<div class="info-card"><h3>The Brunswick Inn</h3><div class="dist">1.5 miles</div><div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Brunswick+Inn+Railway+Terrace+Derby+DE1+2RU" target="_blank">Railway Terrace, DE1 2RU</a></div></div>
+<div class="info-card"><h3>Royal Telegraph</h3><div class="dist">1.5 miles</div><div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=73+London+Road+Derby+DE1+2QS" target="_blank">73 London Road, DE1 2QS</a></div></div>
+<div class="info-card"><h3>Lodge</h3><div class="dist">1.7 miles</div><div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Grange+Road+Derby+DE24+0JW" target="_blank">Grange Road, DE24 0JW</a></div></div>
+<div class="info-card"><h3>The Neptune</h3><div class="dist">1.7 miles</div><div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=10+Osmaston+Road+Derby+DE1+2HR" target="_blank">10 Osmaston Road, DE1 2HR</a></div></div>
+<div class="info-card"><h3>Sitwell Tavern</h3><div class="dist">1.8 miles</div><div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Sitwell+Street+Derby+DE1+2JT" target="_blank">Sitwell Street, DE1 2JT</a></div></div>
+<div class="info-card"><h3>Blue Jay</h3><div class="dist">1.9 miles</div><div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Linville+Close+Derby+DE21+7HX" target="_blank">Linville Close, DE21 7HX</a></div></div>
+<div class="info-card"><h3>The Chestnut Tree</h3><div class="dist">2.4 miles</div><div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=174+Portland+Street+Derby+DE23+8PJ" target="_blank">174 Portland Street, DE23 8PJ</a></div></div>
+<div class="info-card"><h3>The Bank</h3><div class="dist">2.8 miles</div><div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Aspen+Drive+Derby+DE21+7SG" target="_blank">Aspen Drive, DE21 7SG</a></div></div>
+</div>
+
+<!-- ═══════════ FOOD ═══════════ -->
+<div class="cat-section active" data-cat="all food">
+<h2>🍽 Where to Eat</h2>
+
+<div class="info-card">
+  <h3>Merlin</h3><div class="dist">0.5 miles</div>
+  <div class="desc">Family pub chain with a global menu.</div>
+  <div class="price">£ · £8–15</div>
+  <div class="phone">📞 01332 386241</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=1+Orient+Way+Derby+DE24+8BY" target="_blank">1 Orient Way, DE24 8BY</a></div>
+</div>
+
+<div class="info-card">
+  <h3>Frankie & Benny's</h3><div class="dist">1.1 miles</div>
+  <div class="desc">Chain restaurant serving Italian and American classics. Family friendly.</div>
+  <div class="price">££ · £12–22</div>
+  <div class="phone">📞 01332 333210</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Frankie+and+Bennys+Pride+Park+Derby+DE24+8BW" target="_blank">Pride Park, Derwent Parade, DE24 8BW</a></div>
+</div>
+
+<div class="info-card">
+  <h3>The Yard</h3><div class="dist">1.1 miles</div>
+  <div class="desc">All-day restaurant and bar with casual atmosphere at Pride Park Stadium.</div>
+  <div class="price">££ · £12–25</div>
+  <div class="phone">📞 01332 821001</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=The+Yard+Pride+Park+Stadium+Derby+DE24+8XL" target="_blank">Pride Park Stadium, DE24 8XL</a></div>
+</div>
+
+<div class="info-card">
+  <h3>Mount Everest</h3><div class="dist">1.2 miles</div>
+  <div class="desc">Nepalese restaurant. Late night food. Child friendly, casual, good for groups.</div>
+  <div class="price">££ · £15–25</div>
+  <div class="phone">📞 01332 298060</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=165+London+Road+Derby+DE1+2SU" target="_blank">165 London Road, DE1 2SU</a></div>
+</div>
+
+<div class="info-card">
+  <h3>Viceroy</h3><div class="dist">1.2 miles</div>
+  <div class="desc">Comprehensive menu of classic Indian dishes in a spotlit modern space.</div>
+  <div class="price">££ · £15–25</div>
+  <div class="phone">📞 01332 419202</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=8+Midland+Road+Derby+DE1+2SN" target="_blank">8-9 Midland Road, DE1 2SN</a></div>
+</div>
+
+<div class="info-card">
+  <h3>Shalimar Gold</h3><div class="dist">1.3 miles</div>
+  <div class="desc">Smart modern restaurant serving classic Indian dishes presented in a contemporary manner.</div>
+  <div class="price">££ · £18–30</div>
+  <div class="phone">📞 01332 366745</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=15+Midland+Road+Derby+DE1+2SN" target="_blank">15 Midland Road, DE1 2SN</a></div>
+</div>
+
+<div class="info-card">
+  <h3>Steliana's & Sapho's Greek Tavern</h3><div class="dist">1.4 miles</div>
+  <div class="desc">Mediterranean, Greek cuisine. Vegetarian friendly, family friendly, good for groups.</div>
+  <div class="price">££ · £15–25</div>
+  <div class="phone">📞 01332 385200</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=115+London+Road+Derby+DE1+2QS" target="_blank">115 London Road, DE1 2QS</a></div>
+</div>
+
+<div class="info-card">
+  <h3>The New Water Margin</h3><div class="dist">1.9 miles</div>
+  <div class="desc">Chinese restaurant. Cantonese and Peking cuisine. Set menu and all-you-can-eat options. Casual, family friendly.</div>
+  <div class="price">££ · £12–22</div>
+  <div class="phone">📞 01332 290482</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=72+Burton+Road+Derby+DE1+1TG" target="_blank">72-74 Burton Road, DE1 1TG</a></div>
+</div>
+
+<div class="info-card">
+  <h3>Carnero Lounge</h3><div class="dist">2.1 miles</div>
+  <div class="desc">British all-day menu. Casual lounge and café.</div>
+  <div class="price">££ · £10–20</div>
+  <div class="phone">📞 01332 349662</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Carnero+Lounge+Derby+DE1+1SH" target="_blank">10 St Peter's Street, DE1 1SH</a></div>
+</div>
+
+<div class="info-card">
+  <h3>Dolce Salato</h3><div class="dist">2.4 miles</div>
+  <div class="desc">Italian restaurant. Reservations required. Menu changes daily. Cosy atmosphere.</div>
+  <div class="price">£££ · £25–40</div>
+  <div class="phone">📞 07428 062931</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=32+Queen+Street+Derby+DE1+3DE" target="_blank">32 Queen Street, DE1 3DE</a></div>
+</div>
+
+<div class="info-card">
+  <h3>Zizzi</h3><div class="dist">2.6 miles</div>
+  <div class="desc">Italian restaurant. Authentic Italian dishes, quirky design. Free WiFi. Family friendly.</div>
+  <div class="price">££ · £15–25</div>
+  <div class="phone">📞 01332 208297</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Zizzi+Friar+Gate+Derby+DE1+1BX" target="_blank">16 Friar Gate, DE1 1BX</a></div>
+</div>
+
+<div class="info-card">
+  <h3>The Palfrey</h3><div class="dist">2.7 miles</div>
+  <div class="desc">Creative seasonal fare with wines and specialty cocktails. Modern space with courtyard.</div>
+  <div class="price">£££ · £25–45</div>
+  <div class="phone">📞 01332 293135</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=The+Palfrey+Old+Blacksmiths+Yard+Derby+DE1+3PD" target="_blank">Old Blacksmiths Yard, DE1 3PD</a></div>
+</div>
+
+<div class="info-card">
+  <h3>Turtle Bay</h3><div class="dist">2.9 miles</div>
+  <div class="desc">Caribbean restaurant. Casual, family friendly, good for groups.</div>
+  <div class="price">££ · £15–25</div>
+  <div class="phone">📞 01332 344100</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Turtle+Bay+Wardwick+Derby+DE1+1HA" target="_blank">1-5 Wardwick, DE1 1HA</a></div>
+</div>
+
+<h2>🍔 Takeaway & Fast Food</h2>
+<div class="info-card">
+  <h3>Pride Park & London Road</h3>
+  <div class="desc">McDonald's, KFC, Burger King, Subway, Costa — all on Pride Park. Various pizza and Indian takeaway outlets on London Road.</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Pride+Park+Derby" target="_blank">Pride Park, Derby</a></div>
+</div>
+</div>
+
+<!-- ═══════════ SHOPPING ═══════════ -->
+<div class="cat-section active" data-cat="all shopping">
+<h2>🛍 Supermarkets & Shopping</h2>
+
+<div class="info-card"><h3>Tesco Express</h3><div class="dist">1.2 miles</div><div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Tesco+Express+London+Road+Derby+DE24+8QN" target="_blank">London Road, DE24 8QN</a></div></div>
+<div class="info-card"><h3>Iceland Foods</h3><div class="dist">1.7 miles</div><div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Iceland+London+Road+Derby+DE24+8QN" target="_blank">London Road, DE24 8QN</a></div></div>
+<div class="info-card"><h3>Sainsbury's Superstore</h3><div class="dist">1.9 miles</div><div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Sainsburys+Wyvern+Way+Derby+DE21+6NZ" target="_blank">Wyvern Way, DE21 6NZ</a></div></div>
+<div class="info-card"><h3>Lidl</h3><div class="dist">2.1 miles</div><div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Lidl+Southgate+Retail+Park+Derby+DE23+6UQ" target="_blank">Southgate Retail Park, Normanton Road, DE23 6UQ</a></div></div>
+
+<h2>🛒 Shopping Centres</h2>
+
+<div class="info-card">
+  <h3>Derbion (Intu Derby)</h3>
+  <div class="desc">Large indoor shopping centre in the heart of the city. Retail, leisure and dining. Home to Showcase Cinema de Lux, Hollywood Bowl and Paradise Island Adventure Golf. Connected to St Peter's Way shopping precinct. Minutes from bus and train stations.</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Derbion+Derby" target="_blank">Derby city centre</a></div>
+</div>
+
+<div class="info-card">
+  <h3>Cathedral Quarter</h3>
+  <div class="desc">Upmarket area around Derby Cathedral. Quality independent niche retailers, cafés, restaurants and bars.</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Cathedral+Quarter+Derby" target="_blank">Cathedral Quarter, Derby</a></div>
+</div>
+
+<div class="info-card">
+  <h3>Wyvern Retail Park</h3>
+  <div class="desc">Selection of shops and eateries just around the corner from Pride Park Stadium. Free parking (max stay restrictions apply). Ideal for quick retail therapy without the city centre bustle.</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Wyvern+Retail+Park+Derby+DE21+6NZ" target="_blank">Wyvern Way, Pride Park, DE21 6NZ</a></div>
+</div>
+</div>
+
+</main>
+
+<script>
+function switchCat(cat) {
+  document.querySelectorAll('.tab-row button').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  document.querySelectorAll('.cat-section').forEach(s => {
+    s.classList.toggle('active', s.dataset.cat.includes(cat));
+  });
+}
+</script>
+</body>
+</html>
