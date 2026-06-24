@@ -284,6 +284,19 @@ const EVENTS = [
   { date:"2026-07-04", icon:"🏆", title:"Finals Day",           time:"All day", desc:"Medal games at Highfields. Trading continues — bring your swag!" },
 ];
 
+// ponytail: sort by date+time so each day displays in chronological order
+EVENTS.sort((a, b) => {
+  if (a.date !== b.date) return a.date.localeCompare(b.date);
+  const t = s => {
+    if (s.startsWith('From ')) return s.slice(5);
+    if (s === 'All day') return '00:00';
+    if (s === 'Evening') return '18:00';
+    return s.split('–')[0].trim();
+  };
+  return t(a.time).localeCompare(t(b.time));
+});
+GAMES.sort((a, b) => a.date !== b.date ? a.date.localeCompare(b.date) : a.time.localeCompare(b.time));
+
 const START = new Date("2026-06-26");
 const END   = new Date("2026-07-04");
 const DAYS  = Math.floor((END - START) / 86400000);
