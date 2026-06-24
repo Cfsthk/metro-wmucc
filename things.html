@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Metro · Things to Do</title>
+<style>
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  :root {
+    --bg:#fafafa; --card:#fff; --text:#1a1a1a; --muted:#6b6b6b;
+    --subtle:#e5e5e5; --accent:#cc2233; --accent-dim:#fce4e6;
+    --radius:10px; --shadow:0 1px 3px rgba(0,0,0,0.06);
+  }
+  html { font-size:15px; -webkit-font-smoothing:antialiased; }
+  body {
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    background:var(--bg); color:var(--text); line-height:1.5;
+    min-height:100vh; max-width:500px; margin:0 auto;
+  }
+  header { padding:24px 16px 8px; display:flex; align-items:center; gap:10px; }
+  header .dot { width:11px; height:11px; border-radius:50%; background:var(--accent); flex-shrink:0; }
+  header h1 { font-size:1.1rem; font-weight:700; }
+  header span { color:var(--muted); font-size:0.75rem; font-weight:500; display:block; }
+  .back-link { display:inline-block; padding:0 16px; font-size:0.75rem; color:var(--accent); font-weight:600; text-decoration:none; margin-bottom:4px; }
+  main { padding:8px 14px 64px; }
+
+  .tab-row {
+    display:flex; gap:0; padding:0 10px;
+    border-bottom:1px solid var(--subtle); margin-bottom:14px;
+    overflow-x:auto; scrollbar-width:none;
+  }
+  .tab-row::-webkit-scrollbar { display:none; }
+  .tab-row button {
+    flex:0 0 auto; font:inherit; font-size:0.68rem; font-weight:700;
+    text-transform:uppercase; letter-spacing:0.3px;
+    padding:10px 8px; background:none; border:none;
+    border-bottom:3px solid transparent;
+    color:var(--muted); cursor:pointer; transition:0.15s; white-space:nowrap;
+  }
+  .tab-row button.active { color:var(--accent); border-bottom-color:var(--accent); }
+
+  .cat-section { display:none; }
+  .cat-section.active { display:block; }
+
+  .spot-card {
+    background:var(--card); border:1px solid var(--subtle);
+    border-radius:var(--radius); padding:14px; margin-bottom:10px;
+    box-shadow:var(--shadow);
+  }
+  .spot-card h3 { font-size:0.9rem; font-weight:700; margin-bottom:2px; }
+  .spot-card .price { font-size:0.7rem; color:var(--accent); font-weight:700; margin-bottom:4px; }
+  .spot-card .desc { font-size:0.78rem; color:var(--muted); line-height:1.5; margin-bottom:6px; }
+  .spot-card .addr { font-size:0.72rem; }
+  .spot-card .addr a { color:var(--accent); text-decoration:none; font-weight:600; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="dot"></div>
+  <div><h1>Things to Do</h1><span>Nottingham · Derby · Surrounding Areas</span></div>
+</header>
+<a href="index.html" class="back-link">← Back to schedule</a>
+
+<div class="tab-row">
+  <button class="active" onclick="switchCat('all')">All</button>
+  <button onclick="switchCat('historical')">🏛 Historical</button>
+  <button onclick="switchCat('scenery')">🌿 Scenery</button>
+  <button onclick="switchCat('shopping')">🛍 Shopping</button>
+  <button onclick="switchCat('food')">🍽 Food</button>
+  <button onclick="switchCat('entertainment')">🎭 Entertainment</button>
+</div>
+
+<main>
+<!-- ═══════════ HISTORICAL ═══════════ -->
+<div class="cat-section active" data-cat="all historical">
+<h3 style="font-size:0.72rem;color:var(--accent);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;">🏛 Historical</h3>
+
+<div class="spot-card">
+  <h3>Nottingham Castle</h3>
+  <div class="price">£13 adult · free for under 15s</div>
+  <div class="desc">Rebuilt Ducal Palace with Robin Hood gallery, caves, and stunning city views. Recently renovated.</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Nottingham+Castle" target="_blank">Lenton Road, NG1 6EL</a></div>
+</div>
+
+<div class="spot-card">
+  <h3>City of Caves (National Justice Museum)</h3>
+  <div class="price">£10.95 adult</div>
+  <div class="desc">Underground network of man-made caves beneath Nottingham — Anglo-Saxon tannery, WWII air raid shelters, medieval dungeons.</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=City+of+Caves+Nottingham" target="_blank">Broadmarsh Shopping Centre, NG1 7LS</a></div>
+</div>
+
+<div class="spot-card">
+  <h3>Wollaton Hall & Deer Park</h3>
+  <div class="price">Free entry · parking £5</div>
+  <div class="desc">Elizabethan mansion (Batman's Wayne Manor in Dark Knight Rises), Natural History Museum, 500-acre deer park.</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Wollaton+Hall+Nottingham" target="_blank">Wollaton, NG8 2AE</a></div>
+</div>
+
+<div class="spot-card">
+  <h3>Newstead Abbey</h3>
+  <div class="price">£10 adult · gardens only £6</div>
+  <div class="desc">Lord Byron's ancestral home — medieval abbey turned stately house, 300 acres of gardens and lakes.</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Newstead+Abbey" target="_blank">Newstead, NG15 8NA</a></div>
+</div>
+
+<div class="spot-card">
+  <h3>Derby Cathedral</h3>
+  <div class="price">Free</div>
+  <div class="desc">16th-century perpendicular gothic tower (second tallest in England), Peregrine falcons nesting, beautiful stained glass.</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Derby+Cathedral" target="_blank">Iron Gate, Derby DE1 3GP</a></div>
+</div>
+
+<div class="spot-card">
+  <h3>Derby Museum of Making</h3>
+  <div class="price">Free</div>
+  <div class="desc">World's first factory (Lombe's Silk Mill) — interactive museum of industry, innovation and making.</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Derby+Museum+of+Making" target="_blank">Silk Mill Lane, Derby DE1 3AF</a></div>
+</div>
+
+<div class="spot-card">
+  <h3>Southwell Minster</h3>
+  <div class="price">Free · suggested donation £5</div>
+  <div class="desc">Romanesque and Gothic cathedral — exquisite 13th-century Chapter House with famous 'Leaves of Southwell' stone carvings.</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Southwell+Minster" target="_blank">Church Street, Southwell NG25 0HD</a></div>
+</div>
+
+<div class="spot-card">
+  <h3>Newark Castle & Civil War Museum</h3>
+  <div class="price">Free · museum £4.50</div>
+  <div class="desc">12th-century riverside castle where King John died. Civil War museum in the Old Magnus Buildings.</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Newark+Castle" target="_blank">Castle Gate, Newark NG24 1BG</a></div>
+</div>
+
+<div class="spot-card">
+  <h3>Belvoir Castle</h3>
+  <div class="price">£20 adult</div>
+  <div class="desc">Stunning Regency castle, seat of the Duke of Rutland for 1,000 years. Capability Brown gardens, art collection.</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Belvoir+Castle" target="_blank">Grantham, NG32 1PE</a></div>
+</div>
+
+<div class="spot-card">
+  <h3>Hardwick Hall</h3>
+  <div class="price">£15 adult · NT free</div>
+  <div class="desc">Elizabethan prodigy house — "more glass than wall." Built by Bess of Hardwick, one of England's richest women.</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Hardwick+Hall" target="_blank">Doe Lea, Chesterfield S44 5QJ</a></div>
+</div>
+
+<div class="spot-card">
+  <h3>Loughborough Carillon & War Museum</h3>
+  <div class="price">Free</div>
+  <div class="desc">152ft war memorial tower with 47 bells. Museum tells local military history.</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Carillon+Loughborough" target="_blank">Queen's Park, Loughborough LE11 3DU</a></div>
+</div>
+
+<div class="spot-card">
+  <h3>Melbourne Hall</h3>
+  <div class="price">Gardens £7 · house by tour only</div>
+  <div class="desc">Queen Anne-style house with stunning formal gardens. Home of Lord Melbourne, Queen Victoria's first PM.</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Melbourne+Hall+Derbyshire" target="_blank">Melbourne, Derby DE73 8EN</a></div>
+</div>
+
+<div class="spot-card">
+  <h3>Calke Abbey</h3>
+  <div class="price">£12 adult · NT free</div>
+  <div class="desc">The "unstately home" — deliberately preserved in decay. Fascinating glimpse into a 19th-century aristocratic hoarder.</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Calke+Abbey" target="_blank">Ticknall, Derby DE73 7LE</a></div>
+</div>
+
+<div class="spot-card">
+  <h3>Bolsover Castle</h3>
+  <div class="price">£12 adult · EH free</div>
+  <div class="desc">17th-century "pleasure palace" — lavishly decorated Little Castle with painted ceilings, riding school, stunning views.</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Bolsover+Castle" target="_blank">Bolsover, S44 6PR</a></div>
+</div>
+
+<div class="spot-card">
+  <h3>The Workhouse (Southwell)</h3>
+  <div class="price">£10 adult · NT free</div>
+  <div class="desc">Best-preserved Victorian workhouse in England. Chilling insight into poverty and welfare before the NHS.</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=The+Workhouse+Southwell" target="_blank">Upton Road, Southwell NG25 0PT</a></div>
+</div>
+</div>
+
+<!-- ═══════════ SCENERY ═══════════ -->
+<div class="cat-section active" data-cat="all scenery">
+<h3 style="font-size:0.72rem;color:var(--accent);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;">🌿 Scenery & Nature</h3>
+
+<div class="spot-card">
+  <h3>Peak District National Park</h3>
+  <div class="price">Free</div>
+  <div class="desc">First UK National Park. Stunning walks — Mam Tor, Stanage Edge, Dovedale, Kinder Scout. 30–40 mins to southern edges.</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Peak+District+National+Park" target="_blank">Multiple entry points</a></div>
+</div>
+
+<div class="spot-card">
+  <h3>Attenborough Nature Reserve</h3>
+  <div class="price">Free · parking £3</div>
+  <div class="desc">226-hectare wetland reserve — 6 bird hides, walking trails, wildflower meadows. Kingfishers, bitterns, otters.</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Attenborough+Nature+Reserve" target="_blank">Barton Lane, Attenborough NG9 6DY</a></div>
+</div>
+
+<div class="spot-card">
+  <h3>Sherwood Forest (Major Oak)</h3>
+  <div class="price">Free · parking £5</div>
+  <div class="desc">Home of Robin Hood. See the 1,000-year-old Major Oak. Forest trails, visitor centre, annual Robin Hood Festival.</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Sherwood+Forest+Visitor+Centre" target="_blank">Edwinstowe, NG21 9QB</a></div>
+</div>
+
+<div class="spot-card">
+  <h3>Rutland Water</h3>
+  <div class="price">Free · activities from £5</div>
+  <div class="desc">One of Europe's largest man-made lakes. Cycling (23-mile loop), sailing, birdwatching, Normanton Church on the water.</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Rutland+Water" target="_blank">Oakham, LE15 8BL</a></div>
+</div>
+
+<div class="spot-card">
+  <h3>Bradgate Park</h3>
+  <div class="price">Free · parking £4</div>
+  <div class="desc">830-acre medieval deer park — birthplace of Lady Jane Grey. Wild red and fallow deer, Old John Tower, rocky outcrops.</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Bradgate+Park" target="_blank">Newtown Linford, LE6 0HE</a></div>
+</div>
+
+<div class="spot-card">
+  <h3>Carsington Water</h3>
+  <div class="price">Free · parking £3</div>
+  <div class="desc">8-mile circular reservoir walk. Sailing, windsurfing, cycling, bird hides, playgrounds. Great pub at the visitor centre.</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Carsington+Water" target="_blank">Ashbourne, DE6 1ST</a></div>
+</div>
+
+<div class="spot-card">
+  <h3>Dovedale & the Stepping Stones</h3>
+  <div class="price">Free · parking £3.50</div>
+  <div class="desc">Iconic limestone valley in the Peak District. Famous stepping stones across the River Dove, Thorpe Cloud hill, caves.</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Dovedale+Stepping+Stones" target="_blank">Dovedale, Ashbourne DE6 2AY</a></div>
+</div>
+
+<div class="spot-card">
+  <h3>Rushcliffe Country Park</h3>
+  <div class="price">Free</div>
+  <div class="desc">210 acres with lake, wildflower meadows, sculpture trail, playground, café. Great for a quick 20-min escape.</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Rushcliffe+Country+Park" target="_blank">Ruddington, NG11 6JS</a></div>
+</div>
+
+<div class="spot-card">
+  <h3>Trent Lock & River Trent</h3>
+  <div class="price">Free</div>
+  <div class="desc">Riverside walks at the junction of River Trent, Erewash Canal and Cranfleet Cut. Pubs by the water, narrowboats.</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Trent+Lock+Nottingham" target="_blank">Trent Lock, Long Eaton NG10 2FY</a></div>
+</div>
+
+<div class="spot-card">
+  <h3>Chatsworth House Gardens</h3>
+  <div class="price">Gardens £15 · house extra</div>
+  <div class="desc">One of England's finest stately homes. 105-acre gardens by Capability Brown, maze, water features, farmyard.</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Chatsworth+House" target="_blank">Bakewell, DE45 1PP</a></div>
+</div>
+
+<div class="spot-card">
+  <h3>Staunton Harold Reservoir</h3>
+  <div class="price">Free · parking £2.50</div>
+  <div class="desc">Peaceful reservoir with sailing, walking trails, wild swimming area, and a lovely craft centre nearby.</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Staunton+Harold+Reservoir" target="_blank">Staunton Harold, LE65 1RU</a></div>
+</div>
+
+<div class="spot-card">
+  <h3>Foremark Reservoir</h3>
+  <div class="price">Free · parking £3</div>
+  <div class="desc">Woodland walks, picnic spots, sailing. Popular with families for paddling and relaxing by the water.</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Foremark+Reservoir" target="_blank">Foremark, DE65 6EG</a></div>
+</div>
+</div>
+
+<!-- ═══════════ SHOPPING ═══════════ -->
+<div class="cat-section active" data-cat="all shopping">
+<h3 style="font-size:0.72rem;color:var(--accent);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;">🛍 Shopping</h3>
+
+<div class="spot-card">
+  <h3>Victoria Centre</h3>
+  <div class="price">Free entry</div>
+  <div class="desc">Nottingham's main shopping mall — John Lewis, Apple, Zara, H&M, 100+ stores, Clock Tower and Emett Clock.</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Victoria+Centre+Nottingham" target="_blank">Milton Street, NG1 3QN</a></div>
+</div>
+
+<div class="spot-card">
+  <h3>Derbion (formerly Intu Derby)</h3>
+  <div class="price">Free entry</div>
+  <div class="desc">Derby's largest shopping centre with 180+ stores, cinema, restaurants, and food court.</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Derbion+Derby" target="_blank">London Road, Derby DE1 2PL</a></div>
+</div>
+
+<div class="spot-card">
+  <h3>Hockley & Lace Market</h3>
+  <div class="price">Free to browse</div>
+  <div class="desc">Nottingham's independent quarter — vintage shops, record stores, street art, cool cafés, independent boutiques.</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Hockley+Nottingham" target="_blank">Hockley, NG1</a></div>
+</div>
+
+<div class="spot-card">
+  <h3>Westfield Derby</h3>
+  <div class="price">Free entry</div>
+  <div class="desc">Outdoor shopping and leisure complex with big brands, restaurants, and a cinema just outside Derby centre.</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Westfield+Derby" target="_blank">Derby DE1 2PQ</a></div>
+</div>
+
+<div class="spot-card">
+  <h3>Bridlesmith Gate & Flying Horse Walk</h3>
+  <div class="price">Free to browse</div>
+  <div class="desc">Nottingham's designer and boutique arcade — Paul Smith (born here!), Ted Baker, independent jewellers.</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Bridlesmith+Gate+Nottingham" target="_blank">Bridlesmith Gate, NG1</a></div>
+</div>
+
+<div class="spot-card">
+  <h3>McArthurGlen East Midlands Designer Outlet</h3>
+  <div class="price">Free entry</div>
+  <div class="desc">70+ outlet stores — Nike, Adidas, Coach, Ralph Lauren, up to 60% off. 25 mins north of Nottingham.</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=McArthurGlen+East+Midlands+Outlet" target="_blank">Mansfield Road, South Normanton DE55 2JW</a></div>
+</div>
+
+<div class="spot-card">
+  <h3>Derby Market Hall</h3>
+  <div class="price">Free entry</div>
+  <div class="desc">Victorian covered market — local produce, artisan goods, street food, vintage finds. Recently refurbished.</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Derby+Market+Hall" target="_blank">Market Place, Derby DE1 3AH</a></div>
+</div>
+
+<div class="spot-card">
+  <h3>Sneinton Market & Creative Quarter</h3>
+  <div class="price">Free to browse</div>
+  <div class="desc">Independent makers, vintage markets, street food, craft beer, artist studios. Cool, up-and-coming area.</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Sneinton+Market+Nottingham" target="_blank">Sneinton, NG1 1DS</a></div>
+</div>
+</div>
+
+<!-- ═══════════ FOOD ═══════════ -->
+<div class="cat-section active" data-cat="all food">
+<h3 style="font-size:0.72rem;color:var(--accent);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;">🍽 Food & Drink (Top 30)</h3>
+
+<div class="spot-card"><h3>Sat Bains (Restaurant with Rooms)</h3><div class="price">££££ · Tasting menu £150+</div><div class="desc">2 Michelin stars. One of the UK's finest restaurants. Seasonal tasting menus in an intimate setting.</div><div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Sat+Bains+Nottingham" target="_blank">Lenton Lane, NG7 2SA</a></div></div>
+<div class="spot-card"><h3>Restaurant Sat Bains (casual — Nucleus)</h3><div class="price">£££ · £75–100</div><div class="desc">Casual dining room by Sat Bains. A la carte with the same kitchen genius at a gentler price.</div><div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Nucleus+Nottingham" target="_blank">Lenton Lane, NG7 2SA</a></div></div>
+<div class="spot-card"><h3>Iberico World Tapas</h3><div class="price">££ · £25–45</div><div class="desc">Bib Gourmand. Incredible Spanish/Asian fusion tapas in a stunning Grade II listed building under the caves.</div><div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Iberico+Nottingham" target="_blank">High Pavement, NG1 1HN</a></div></div>
+<div class="spot-card"><h3>Alchemilla</h3><div class="price">£££ · £70–120</div><div class="desc">Michelin star. Mediterranean fine dining by Alex Bond. Plant-focused, creative, beautiful rooftop herb garden.</div><div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Alchemilla+Nottingham" target="_blank">Derby Road, NG7 1ND</a></div></div>
+<div class="spot-card"><h3>Mowgli Street Food</h3><div class="price">£ · £10–20</div><div class="desc">Vibrant Indian street food — tiffin boxes, curry, gunpowder chicken. Great veggie options, swing seats.</div><div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Mowgli+Nottingham" target="_blank">Hockley, NG1 1FP</a></div></div>
+<div class="spot-card"><h3>Kushi-ya</h3><div class="price">££ · £20–35</div><div class="desc">Japanese skewer bar. Michelin Bib Gourmand. Yakitori, small plates, excellent sake and Japanese whisky.</div><div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Kushi-ya+Nottingham" target="_blank">Cannon Court, NG1 6JE</a></div></div>
+<div class="spot-card"><h3>Yamas Meze & Tapas</h3><div class="price">££ · £25–35</div><div class="desc">Greek/Mediterranean meze. Huge sharing platters, family-run, incredibly popular. Book ahead.</div><div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Yamas+Nottingham" target="_blank">Thurland Street, NG1 3DR</a></div></div>
+<div class="spot-card"><h3>Bar Iberico</h3><div class="price">££ · £20–35</div><div class="desc">Casual sister to Iberico. All-day tapas bar, no booking — queue culture. Jamón, croquetas, great wine.</div><div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Bar+Iberico+Nottingham" target="_blank">Carlton Street, NG1 1NN</a></div></div>
+<div class="spot-card"><h3>Annie's Burger Shack</h3><div class="price">£ · £12–18</div><div class="desc">Legendary burger joint — 30+ burgers (all available vegan/veggie), American diner vibe, huge portions.</div><div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Annies+Burger+Shack+Nottingham" target="_blank">Broadway, NG1 1PS</a></div></div>
+<div class="spot-card"><h3>The Cod's Scallops</h3><div class="price">£ · £10–18</div><div class="desc">Award-winning fish & chips. Market-fresh daily catch, homemade mushy peas, 20+ types of fish.</div><div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Cods+Scallops+Nottingham" target="_blank">Wollaton, NG8 1FW</a></div></div>
+<div class="spot-card"><h3>Doughnotts</h3><div class="price">£ · £3–8</div><div class="desc">Nottingham institution. Giant handmade doughnuts — Lotus Biscoff, Crème Brûlée, Raspberry Ripple.</div><div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Doughnotts+Nottingham" target="_blank">King Street, NG1 2AS</a></div></div>
+<div class="spot-card"><h3>Mollis</h3><div class="price">££ · £15–25</div><div class="desc">Fried chicken & natural wine. Cult favourite — hot honey chicken, dirty rice, excellent cocktails.</div><div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Mollis+Nottingham" target="_blank">Derby Road, NG7 1ND</a></div></div>
+<div class="spot-card"><h3>Everyday People</h3><div class="price">££ · £15–25</div><div class="desc">Ramen bar. Tonkotsu, shoyu, miso — all made in-house. Cool vibe, great sake, walk-in only.</div><div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Everyday+People+Nottingham" target="_blank">Byard Lane, NG1 2GJ</a></div></div>
+<div class="spot-card"><h3>Bohns Best Burgers</h3><div class="price">£ · £10–16</div><div class="desc">Smash burgers done right. Simple menu, perfect execution, hidden courtyard location.</div><div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Bohns+Nottingham" target="_blank">Broad Street, NG1 3AL</a></div></div>
+<div class="spot-card"><h3>Pizzamisu</h3><div class="price">££ · £15–25</div><div class="desc">Neapolitan pizza by day, tiramisu bar by night. 48-hour fermented dough, authentic Italian.</div><div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Pizzamisu+Nottingham" target="_blank">Bridlesmith Walk, NG1 2GR</a></div></div>
+<div class="spot-card"><h3>Sarangchae Korean</h3><div class="price">££ · £15–30</div><div class="desc">Authentic Korean BBQ and tabletop grills. Bibimbap, bulgogi, fried chicken, kimchi jjigae.</div><div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Sarangchae+Nottingham" target="_blank">Maid Marian Way, NG1 6BJ</a></div></div>
+<div class="spot-card"><h3>MESA</h3><div class="price">££ · £20–35</div><div class="desc">Modern European sharing plates. Fire-cooked dishes, natural wines, beautiful open kitchen. Brunch on weekends.</div><div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=MESA+Nottingham" target="_blank">Goose Gate, NG1 1FE</a></div></div>
+<div class="spot-card"><h3>Zaap Thai</h3><div class="price">£ · £10–18</div><div class="desc">Bangkok street food. Tuk-tuk seating, neon signs, huge menu. Pad Thai, curries, noodle soups. Fun atmosphere.</div><div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Zaap+Thai+Nottingham" target="_blank">Bromley Place, NG1 6JG</a></div></div>
+<div class="spot-card"><h3>Kayal</h3><div class="price">££ · £18–30</div><div class="desc">Highly-rated Keralan (South Indian) restaurant. Seafood specialities, dosas, fish curries.</div><div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Kayal+Nottingham" target="_blank">Broad Street, NG1 3AL</a></div></div>
+<div class="spot-card"><h3>No. Twelve</h3><div class="price">££ · £25–45</div><div class="desc">Plant-based fine dining in an intimate setting. Michelin Green Star. Tasting menus, seasonal, zero-waste ethos.</div><div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=No+12+Nottingham" target="_blank">Eldon Chambers, NG1 2NS</a></div></div>
+<div class="spot-card"><h3>28 Yorkshire Street</h3><div class="price">£££ · £50–80</div><div class="desc">Modern British tasting menus in a tiny 12-seat chef's table. Hyper-seasonal, local ingredients.</div><div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=28+Yorkshire+Street+Oldham" target="_blank">Mansfield area (nearby)</a></div></div>
+<div class="spot-card"><h3>Brown Betty's</h3><div class="price">£ · £5–12</div><div class="desc">Nottingham's favourite independent café. Legendary breakfast sandwiches, proper coffee, outdoor courtyard.</div><div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Brown+Bettys+Nottingham" target="_blank">St James's Street, NG1 6FH</a></div></div>
+<div class="spot-card"><h3>Hungry Pumpkin</h3><div class="price">£ · £6–12</div><div class="desc">Artisan deli café. Fresh sandwiches, salads, soups, excellent coffee. Hidden gem down an alley.</div><div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Hungry+Pumpkin+Nottingham" target="_blank">High Pavement, NG1 1HN</a></div></div>
+<div class="spot-card"><h3>Darleys Restaurant</h3><div class="price">£££ · £50–70</div><div class="desc">Modern British fine dining overlooking the River Derwent. AA Rosette. Terrace for summer evenings.</div><div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Darleys+Derby" target="_blank">Darley Abbey, Derby DE22 1DZ</a></div></div>
+<div class="spot-card"><h3>The European Restaurant</h3><div class="price">££ · £20–35</div><div class="desc">Derby's longest-established independent. Modern European — steak, seafood, pasta. Great pre-theatre.</div><div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=The+European+Restaurant+Derby" target="_blank">Iron Gate, Derby DE1 3GP</a></div></div>
+<div class="spot-card"><h3>The Wonky Table</h3><div class="price">££ · £20–35</div><div class="desc">Cosy Derby favourite. Seasonal British menu in a 16th-century crooked building. Excellent Sunday roasts.</div><div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=The+Wonky+Table+Derby" target="_blank">Sadler Gate, Derby DE1 3NQ</a></div></div>
+<div class="spot-card"><h3>Lorentes</h3><div class="price">££ · £15–25</div><div class="desc">Authentic Spanish tapas bar. Family-run, excellent jamón, paella, patatas bravas. Great atmosphere.</div><div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Lorentes+Derby" target="_blank">Friar Gate, Derby DE1 1BX</a></div></div>
+<div class="spot-card"><h3>Shalimar Gold</h3><div class="price">££ · £18–30</div><div class="desc">Derby's finest Indian. Elegant dining, exceptional Balti and biryani. Popular with cricket teams.</div><div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Shalimar+Gold+Derby" target="_blank">Midland Road, Derby DE1 2SL</a></div></div>
+<div class="spot-card"><h3>The Dining Room (Beeston)</h3><div class="price">££ · £25–40</div><div class="desc">Neighbourhood fine dining in Beeston. Seasonal tasting menus, relaxed atmosphere, excellent value.</div><div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=The+Dining+Room+Beeston" target="_blank">Beeston, NG9 2LL</a></div></div>
+<div class="spot-card"><h3>Pudding Pantry</h3><div class="price">£ · £8–15</div><div class="desc">All-day brunch and desserts. Pancake stacks, freakshakes, brownies. Sherwood and city centre locations.</div><div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Pudding+Pantry+Nottingham" target="_blank">Trinity Square, NG1 4DB</a></div></div>
+</div>
+
+<!-- ═══════════ ENTERTAINMENT ═══════════ -->
+<div class="cat-section active" data-cat="all entertainment">
+<h3 style="font-size:0.72rem;color:var(--accent);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;">🎭 Entertainment</h3>
+
+<div class="spot-card">
+  <h3>Motorpoint Arena Nottingham</h3>
+  <div class="price">Varies by event · £30–150</div>
+  <div class="desc">10,000-capacity arena. Major concerts, comedy, sports. Check listings during tournament week.</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Motorpoint+Arena+Nottingham" target="_blank">Bolero Square, NG1 1LA</a></div>
+</div>
+
+<div class="spot-card">
+  <h3>Nottingham Playhouse</h3>
+  <div class="price">£15–40</div>
+  <div class="desc">Award-winning theatre with a diverse programme — drama, musicals, dance, comedy. Sky Mirror outside.</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Nottingham+Playhouse" target="_blank">Wellington Circus, NG1 5AF</a></div>
+</div>
+
+<div class="spot-card">
+  <h3>Rock City</h3>
+  <div class="price">£10–35</div>
+  <div class="desc">Iconic 2,000-capacity live music venue. Nirvana, Oasis, Radiohead all played here. Club nights till 3am.</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Rock+City+Nottingham" target="_blank">Talbot Street, NG1 5GG</a></div>
+</div>
+
+<div class="spot-card">
+  <h3>National Ice Centre</h3>
+  <div class="price">£11 adult · £9 junior</div>
+  <div class="desc">Olympic-size twin ice rinks. Public skating, ice hockey (Nottingham Panthers), learn-to-skate sessions.</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=National+Ice+Centre+Nottingham" target="_blank">Bolero Square, NG1 1LA</a></div>
+</div>
+
+<div class="spot-card">
+  <h3>Broadway Cinema</h3>
+  <div class="price">£10 adult · £7 matinee</div>
+  <div class="desc">Independent arthouse cinema. Curated programme, director Q&As, great bar and café. One of the UK's best.</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Broadway+Cinema+Nottingham" target="_blank">Broad Street, NG1 3AL</a></div>
+</div>
+
+<div class="spot-card">
+  <h3>Escape Rooms (Cryptology / Escapologic)</h3>
+  <div class="price">£17–25pp</div>
+  <div class="desc">Multiple high-quality escape rooms. Escapologic rated one of UK's best. Horror, heist, sci-fi themes.</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Escapologic+Nottingham" target="_blank">Castle Gate, NG1 7AT</a></div>
+</div>
+
+<div class="spot-card">
+  <h3>Nottingham Bowl (tenpin)</h3>
+  <div class="price">£7–12pp per game</div>
+  <div class="desc">City-centre bowling. Arcade games, pool tables, bar, food. Great for group nights out.</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Nottingham+Bowl" target="_blank">Belward Street, NG1 1JZ</a></div>
+</div>
+
+<div class="spot-card">
+  <h3>Derby Theatre</h3>
+  <div class="price">£15–35</div>
+  <div class="desc">Professional producing theatre. New writing, classics, touring productions. Lovely modern venue.</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Derby+Theatre" target="_blank">Theatre Walk, Derby DE1 2NF</a></div>
+</div>
+
+<div class="spot-card">
+  <h3>QUAD Derby</h3>
+  <div class="price">£10 cinema · exhibitions free</div>
+  <div class="desc">Independent arts centre — arthouse cinema, digital art gallery, artist studios, excellent café-bar.</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=QUAD+Derby" target="_blank">Market Place, Derby DE1 3AS</a></div>
+</div>
+
+<div class="spot-card">
+  <h3>Nottingham Racecourse (Colwick Park)</h3>
+  <div class="price">£10–25 entry</div>
+  <div class="desc">Flat horse racing, summer evening meets. Great atmosphere, food and drink, betting fun.</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Nottingham+Racecourse" target="_blank">Colwick Park, NG2 4BE</a></div>
+</div>
+
+<div class="spot-card">
+  <h3>Glee Club Nottingham</h3>
+  <div class="price">£12–30</div>
+  <div class="desc">Premier comedy club. Big-name comedians testing material, up-and-comers, weekend shows with dinner.</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Glee+Club+Nottingham" target="_blank">British Waterways Building, NG1 1EE</a></div>
+</div>
+
+<div class="spot-card">
+  <h3>Stonebridge City Farm</h3>
+  <div class="price">Free · donations welcome</div>
+  <div class="desc">Urban farm in the city centre. Pigs, goats, sheep, chickens. Great for a peaceful afternoon.</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Stonebridge+City+Farm+Nottingham" target="_blank">Stonebridge Road, NG3 2FR</a></div>
+</div>
+
+<div class="spot-card">
+  <h3>Trent Bridge Cricket Ground</h3>
+  <div class="price">Tour £12 · match from £20</div>
+  <div class="desc">Historic test cricket venue. Stadium tours, museum. Check if Notts are playing at home.</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Trent+Bridge+Cricket+Ground" target="_blank">Bridgford Road, NG2 6AG</a></div>
+</div>
+
+<div class="spot-card">
+  <h3>Nottingham Contemporary</h3>
+  <div class="price">Free</div>
+  <div class="desc">World-class contemporary art gallery. Changing exhibitions, free entry, excellent café and shop.</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Nottingham+Contemporary" target="_blank">Weekday Cross, NG1 2GB</a></div>
+</div>
+
+<div class="spot-card">
+  <h3>Vue / Showcase Cinemas</h3>
+  <div class="price">£5–15</div>
+  <div class="desc">Mainstream multiplex cinemas. Showcase has deluxe recliner screens. Multiple locations around Nottingham.</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Showcase+Cinema+Nottingham" target="_blank">Redfield Way, NG7 2UW</a></div>
+</div>
+
+<div class="spot-card">
+  <h3>Adrenalin Jungle</h3>
+  <div class="price">£25–45pp</div>
+  <div class="desc">Outdoor activities — paintball, quad biking, archery, clay shooting, assault course. 20 mins from Nottingham.</div>
+  <div class="addr">📍 <a href="https://www.google.com/maps/search/?api=1&query=Adrenalin+Jungle+Nottingham" target="_blank">Deerdale Lane, NG21 0PW</a></div>
+</div>
+</div>
+
+</main>
+
+<script>
+function switchCat(cat) {
+  document.querySelectorAll('.tab-row button').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  document.querySelectorAll('.cat-section').forEach(s => {
+    s.classList.toggle('active', s.dataset.cat.includes(cat));
+  });
+}
+</script>
+</body>
+</html>
