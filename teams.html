@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Metro · Teams</title>
+<style>
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  :root {
+    --bg:#fafafa; --card:#fff; --text:#1a1a1a; --muted:#6b6b6b;
+    --subtle:#e5e5e5; --accent:#cc2233; --accent-dim:#fce4e6;
+    --radius:10px; --shadow:0 1px 3px rgba(0,0,0,0.06);
+  }
+  html { font-size:15px; -webkit-font-smoothing:antialiased; }
+  body {
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    background:var(--bg); color:var(--text); line-height:1.5;
+    min-height:100vh; max-width:500px; margin:0 auto;
+  }
+  header { padding:24px 16px 8px; display:flex; align-items:center; gap:10px; }
+  header .dot { width:11px; height:11px; border-radius:50%; background:var(--accent); flex-shrink:0; }
+  header h1 { font-size:1.1rem; font-weight:700; }
+  header span { color:var(--muted); font-size:0.75rem; font-weight:500; display:block; }
+  .back-link { display:inline-block; padding:0 16px; font-size:0.75rem; color:var(--accent); font-weight:600; text-decoration:none; margin-bottom:4px; }
+  main { padding:8px 14px 64px; }
+
+  .team-card {
+    background:var(--card); border:1px solid var(--subtle);
+    border-radius:var(--radius); padding:12px 14px; margin-bottom:6px;
+    box-shadow:var(--shadow);
+    display:flex; align-items:center; gap:12px;
+  }
+  .team-card.is-metro { border-color:var(--accent); background:var(--accent-dim); }
+  .team-card .seed {
+    width:32px; height:32px; border-radius:50%;
+    background:var(--subtle); display:flex; align-items:center; justify-content:center;
+    font-size:0.75rem; font-weight:800; color:var(--muted); flex-shrink:0;
+  }
+  .team-card.is-metro .seed { background:var(--accent); color:#fff; }
+  .team-card .name { font-size:0.88rem; font-weight:700; flex:1; }
+  .team-card .country { font-size:0.7rem; color:var(--muted); font-weight:600; }
+  .team-card .flag { font-size:1.3rem; flex-shrink:0; }
+
+  .pool-header {
+    font-size:0.68rem; font-weight:700; text-transform:uppercase;
+    letter-spacing:0.5px; color:var(--accent); margin:16px 0 6px;
+    padding-bottom:4px; border-bottom:2px solid var(--accent-dim);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="dot"></div>
+  <div><h1>Teams</h1><span>Master Mixed · 40 Teams · WMUCC 2026</span></div>
+</header>
+<a href="index.html" class="back-link">← Back to schedule</a>
+
+<main id="main"></main>
+
+<script>
+const FLAGS = {
+  USA:'🇺🇸', CAN:'🇨🇦', AUS:'🇦🇺', GER:'🇩🇪', GBR:'🇬🇧', JPN:'🇯🇵', RSA:'🇿🇦',
+  FRA:'🇫🇷', NED:'🇳🇱', SUI:'🇨🇭', COL:'🇨🇴', SGP:'🇸🇬', NZL:'🇳🇿', BEL:'🇧🇪',
+  AUT:'🇦🇹', MEX:'🇲🇽', CHN:'🇨🇳', HKG:'🇭🇰', MAS:'🇲🇾', GUM:'🇬🇺'
+};
+
+const TEAMS = [
+  {name:'Atlanta Fawkes',country:'USA',seed:1},
+  {name:'Big Cat and the Kittens',country:'CAN',seed:2},
+  {name:'regret.',country:'USA',seed:3},
+  {name:'Qold',country:'CAN',seed:4},
+  {name:'Crown',country:'USA',seed:5},
+  {name:'sno patrol',country:'USA',seed:6},
+  {name:'Slower',country:'USA',seed:7},
+  {name:'Sydney Sails',country:'AUS',seed:8},
+  {name:'FY Ultimate',country:'CAN',seed:9},
+  {name:'Anti Socal Socal Club',country:'USA',seed:10},
+  {name:'Mainzelrentner',country:'GER',seed:11},
+  {name:'Adelaide Old Guard',country:'AUS',seed:12},
+  {name:'Reading Ultimate',country:'GBR',seed:13},
+  {name:'SeeKers',country:'JPN',seed:14},
+  {name:'Disconnection',country:'GER',seed:15},
+  {name:'Long Donkeys',country:'RSA',seed:16},
+  {name:'Heads of State',country:'AUS',seed:17},
+  {name:'ASUL Ultimate',country:'FRA',seed:18},
+  {name:'UFO',country:'NED',seed:19},
+  {name:'FlyHigh',country:'SUI',seed:20},
+  {name:'Thundering Herd',country:'GBR',seed:21},
+  {name:'Newcastle Pie Wagon',country:'AUS',seed:22},
+  {name:'Voltaje Ultimate Club',country:'COL',seed:23},
+  {name:'AUC',country:'NED',seed:24},
+  {name:'Harfang',country:'CAN',seed:25},
+  {name:'Appendix',country:'SGP',seed:26},
+  {name:'Hammertron Tawhito',country:'NZL',seed:27},
+  {name:'Triple M',country:'GER',seed:28},
+  {name:'BMX',country:'BEL',seed:29},
+  {name:'Makawua Ultimate Club',country:'COL',seed:30},
+  {name:'Rheindivers',country:'AUT',seed:31},
+  {name:'Over the Hillhead',country:'GBR',seed:32},
+  {name:'Candela',country:'MEX',seed:33},
+  {name:'Chillkröten',country:'GER',seed:34},
+  {name:'Naja',country:'CHN',seed:35},
+  {name:'Metro',country:'HKG',seed:36},
+  {name:'Purple Cobras',country:'GBR',seed:37},
+  {name:'WAU',country:'MAS',seed:38},
+  {name:'Guam Mixed Masters',country:'GUM',seed:39},
+  {name:'Zoo',country:'GBR',seed:40}
+];
+
+// Pool assignments based on standard 40-team tournament seeding (5 pools of 8)
+const POOLS = {
+  A:[1,10,11,20,21,30,31,40],
+  B:[2,9,12,19,22,29,32,39],
+  C:[3,8,13,18,23,28,33,38],
+  D:[4,7,14,17,24,27,34,37],
+  E:[5,6,15,16,25,26,35,36]
+};
+
+let html = '';
+for (const [pool, seeds] of Object.entries(POOLS)) {
+  html += `<div class="pool-header">Pool ${pool}</div>`;
+  for (const s of seeds) {
+    const t = TEAMS.find(t => t.seed === s);
+    if (!t) continue;
+    const isMetro = t.name === 'Metro';
+    html += `<div class="team-card${isMetro?' is-metro':''}">`;
+    html += `<div class="seed">#${t.seed}</div>`;
+    html += `<div class="name">${t.name}</div>`;
+    html += `<div class="country">${FLAGS[t.country]||''} ${t.country}</div>`;
+    html += `</div>`;
+  }
+}
+
+document.getElementById('main').innerHTML = html;
+</script>
+</body>
+</html>
