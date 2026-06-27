@@ -108,28 +108,24 @@ const TEAMS = [
   {name:'Zoo',country:'GBR',seed:40}
 ];
 
-// Pool assignments based on standard 40-team tournament seeding (5 pools of 8)
+// Pool assignments from wmucc.sport
+const POOL_MAP = {};
 const POOLS = {
-  A:[1,10,11,20,21,30,31,40],
-  B:[2,9,12,19,22,29,32,39],
-  C:[3,8,13,18,23,28,33,38],
-  D:[4,7,14,17,24,27,34,37],
-  E:[5,6,15,16,25,26,35,36]
+  D: [4,7,13,14,17,19,24,27,30,34,36,37]
 };
+for (const [p, seeds] of Object.entries(POOLS)) {
+  for (const s of seeds) POOL_MAP[s] = p;
+}
 
 let html = '';
-for (const [pool, seeds] of Object.entries(POOLS)) {
-  html += `<div class="pool-header">Pool ${pool}</div>`;
-  for (const s of seeds) {
-    const t = TEAMS.find(t => t.seed === s);
-    if (!t) continue;
-    const isMetro = t.name === 'Metro';
-    html += `<div class="team-card${isMetro?' is-metro':''}">`;
-    html += `<div class="seed">#${t.seed}</div>`;
-    html += `<div class="name">${t.name}</div>`;
-    html += `<div class="country">${FLAGS[t.country]||''} ${t.country}</div>`;
-    html += `</div>`;
-  }
+for (const t of TEAMS) {
+  const isMetro = t.name === 'Metro';
+  const pool = POOL_MAP[t.seed] || '';
+  html += `<div class="team-card${isMetro?' is-metro':''}">`;
+  html += `<div class="seed">#${t.seed}</div>`;
+  html += `<div class="name">${t.name}${pool?` <span style="font-size:0.65rem;color:var(--accent);font-weight:700;">Pool ${pool}</span>`:''}</div>`;
+  html += `<div class="country">${FLAGS[t.country]||''} ${t.country}</div>`;
+  html += `</div>`;
 }
 
 document.getElementById('main').innerHTML = html;
