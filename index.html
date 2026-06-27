@@ -301,7 +301,7 @@ GAMES.sort((a, b) => a.date !== b.date ? a.date.localeCompare(b.date) : a.time.l
 const START = new Date("2026-06-26");
 const END   = new Date("2026-07-04");
 const DAYS  = Math.floor((END - START) / 86400000);
-const TODAY = new Date();
+const TODAY = new Date(new Date().toLocaleString('en-GB', { timeZone: 'Europe/London' }));
 
 // ponytail: venue map links from goo.gl short URLs
 const MAP_HIGHFIELDS = 'https://maps.app.goo.gl/x3QH2vKikJhFUqaN6';
