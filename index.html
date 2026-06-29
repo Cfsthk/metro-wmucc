@@ -267,10 +267,15 @@ const PLAYERS = [
 
 // ponytail: static schedule as fallback, Supabase is source of truth for scores
 const GAMES = [
-  { date:"2026-06-28", time:"11:30", opp:"UFO",                 oppSeed:19, oppFlag:"🇳🇱", field:"H13", pool:"Pool D" },
-  { date:"2026-06-28", time:"17:00", opp:"Reading Ultimate",    oppSeed:13, oppFlag:"🇬🇧", field:"H09", pool:"Pool D" },
-  { date:"2026-06-29", time:"17:00", opp:"Qold",                oppSeed: 4, oppFlag:"🇨🇦", field:"H08", pool:"Pool D" },
-  { date:"2026-06-30", time:"16:00", opp:"Makawua Ultimate Club",oppSeed:30, oppFlag:"🇨🇴", field:"R24", pool:"Pool D" },
+  { date:"2026-06-28", time:"11:30", opp:"UFO",                 oppSeed:19, oppFlag:"🇳🇱", field:"H13", pool:"Pool D", ourScore:15, theirScore:14 },
+  { date:"2026-06-28", time:"17:00", opp:"Reading Ultimate",    oppSeed:13, oppFlag:"🇬🇧", field:"H09", pool:"Pool D", ourScore:3,  theirScore:15 },
+  { date:"2026-06-29", time:"17:00", opp:"Qold",                oppSeed: 4, oppFlag:"🇨🇦", field:"H08", pool:"Pool D", ourScore:5,  theirScore:15 },
+  { date:"2026-06-30", time:"16:00", opp:"Makawua Ultimate Club",oppSeed:30, oppFlag:"🇨🇴", field:"R24", pool:"Pool D", ourScore:null, theirScore:null },
+  // 4th Pool D → Crossover vs 4th Pool H (Guam) — lose → placement
+  { date:"2026-07-01", time:"TBC",   opp:"Guam Mixed Masters",  oppSeed:39, oppFlag:"🇬🇺", field:"TBC", pool:"Crossover", ourScore:null, theirScore:null },
+  { date:"2026-07-02", time:"TBC",   opp:"TBC",                 oppSeed:null, oppFlag:"", field:"TBC", pool:"Placement (33-40)", ourScore:null, theirScore:null },
+  { date:"2026-07-03", time:"TBC",   opp:"TBC",                 oppSeed:null, oppFlag:"", field:"TBC", pool:"Placement (33-40)", ourScore:null, theirScore:null },
+  { date:"2026-07-04", time:"TBC",   opp:"TBC",                 oppSeed:null, oppFlag:"", field:"TBC", pool:"Final Placement", ourScore:null, theirScore:null },
 ];
 
 const EVENTS = [
@@ -434,32 +439,24 @@ function renderContent() {
   for (const g of dayGames) {
     const key = g.date + '|' + g.opp;
     const sb = sbCache[key];
-    const hasScore = sb && (sb.our_score > 0 || sb.their_score > 0);
-    const scoreStr = sb ? `${sb.our_score}–${sb.their_score}` : '';
+    const ourScore = sb?.our_score ?? g.ourScore;
+    const theirScore = sb?.their_score ?? g.theirScore;
+    const hasScore = ourScore != null && theirScore != null;
+    const scoreStr = hasScore ? `${ourScore}–${theirScore}` : '';
 
     html += `<div class="card" data-date="${g.date}" data-opp="${g.opp}" onclick="toggleGameCard(this)">`;
     html += `<div class="card-time">${g.time} BST</div>`;
     html += `<div class="team"><div class="flag">🇭🇰</div><div class="name">Metro</div><div class="seed">Seed #36</div></div>`;
     html += `<div class="score-box${hasScore?' has-score':''}" data-score="${scoreStr}"></div>`;
-    html += `<div class="team"><div class="flag">${g.oppFlag}</div><div class="name">${g.opp}</div><div class="seed">Seed #${g.oppSeed}</div></div>`;
+    html += `<div class="team"><div class="flag">${g.oppFlag}</div><div class="name">${g.opp||'TBC'}</div><div class="seed">${g.oppSeed ? 'Seed #'+g.oppSeed : ''}</div></div>`;
     html += `<div class="card-meta">`;
     html += `<span>${g.pool}</span>`;
-    html += `<span>Field <a href="${fieldLink(g.field)}" target="_blank" onclick="event.stopPropagation()">${g.field} →</a></span>`;
+    if (g.field !== 'TBC') html += `<span>Field <a href="${fieldLink(g.field)}" target="_blank" onclick="event.stopPropagation()">${g.field} →</a></span>`;
     html += `</div>`;
-    html += `<div class="stats-panel" id="stats-${g.date}-${g.opp.replace(/[^a-zA-Z0-9]/g,'')}">`;
-    if (sb) {
-      html += `<div class="stats-header">`;
-      html += `<h4>Game Stats</h4>`;
-      if (sb.start_od || sb.start_gender) {
-        html += `<span class="lineup-tag">${[sb.start_od,sb.start_gender].filter(Boolean).join(' · ') || 'Lineup TBD'}</span>`;
-      }
-      html += `</div>`;
-      html += `<div class="stats-empty">📊 Player stats will appear here once recorded.</div>`;
-    } else {
-      html += `<div class="stats-empty">Loading game data…</div>`;
-    }
-    html += `</div>`;
-    html += `</div>`;
+    html += `<div class="stats-panel">`;
+    html += `<div class="stats-header"><h4>Game Stats</h4></div>`;
+    html += `<div class="stats-empty">📊 Player stats will appear here once recorded.</div>`;
+    html += `</div></div>`;
   }
 
   // ── EVENTS ──
