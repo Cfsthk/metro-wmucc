@@ -270,12 +270,15 @@ const GAMES = [
   { date:"2026-06-28", time:"11:30", opp:"UFO",                 oppSeed:19, oppFlag:"🇳🇱", field:"H13", pool:"Pool D", ourScore:15, theirScore:14 },
   { date:"2026-06-28", time:"17:00", opp:"Reading Ultimate",    oppSeed:13, oppFlag:"🇬🇧", field:"H09", pool:"Pool D", ourScore:3,  theirScore:15 },
   { date:"2026-06-29", time:"17:00", opp:"Qold",                oppSeed: 4, oppFlag:"🇨🇦", field:"H08", pool:"Pool D", ourScore:5,  theirScore:15 },
-  { date:"2026-06-30", time:"16:00", opp:"Makawua Ultimate Club",oppSeed:30, oppFlag:"🇨🇴", field:"R24", pool:"Pool D", ourScore:null, theirScore:null },
-  // 4th Pool D → Crossover vs 4th Pool H (Guam) — lose → placement
-  { date:"2026-07-01", time:"TBC",   opp:"Guam Mixed Masters",  oppSeed:39, oppFlag:"🇬🇺", field:"TBC", pool:"Crossover", ourScore:null, theirScore:null },
-  { date:"2026-07-02", time:"TBC",   opp:"TBC",                 oppSeed:null, oppFlag:"", field:"TBC", pool:"Placement (33-40)", ourScore:null, theirScore:null },
-  { date:"2026-07-03", time:"TBC",   opp:"TBC",                 oppSeed:null, oppFlag:"", field:"TBC", pool:"Placement (33-40)", ourScore:null, theirScore:null },
-  { date:"2026-07-04", time:"TBC",   opp:"TBC",                 oppSeed:null, oppFlag:"", field:"TBC", pool:"Final Placement", ourScore:null, theirScore:null },
+  { date:"2026-06-30", time:"16:00", opp:"Makawua Ultimate Club",oppSeed:30, oppFlag:"🇨🇴", field:"R24", pool:"Pool D", ourScore:13, theirScore:15 },
+  // ═══ Crossover X16 — 4th Pool D vs 4th Pool H ═══
+  { date:"2026-07-01", time:"09:00", opp:"Sydney Sails",        oppSeed: 8, oppFlag:"🇦🇺", field:"R16", pool:"Crossover X16" },
+  // Win → Playoff (1-16) Round of 32 | Lose → Placement (17-32)
+  { date:"2026-07-01", time:"14:00", opp:"Win → Playoff R32",   oppSeed:null, oppFlag:"❓", field:"TBC", pool:"If WIN X16" },
+  { date:"2026-07-01", time:"14:00", opp:"Lose → Place. 17-32", oppSeed:null, oppFlag:"❓", field:"TBC", pool:"If LOSE X16" },
+  { date:"2026-07-02", time:"TBC",   opp:"TBC",                 oppSeed:null, oppFlag:"", field:"TBC", pool:"Bracket (cont.)" },
+  { date:"2026-07-03", time:"TBC",   opp:"TBC",                 oppSeed:null, oppFlag:"", field:"TBC", pool:"Bracket (cont.)" },
+  { date:"2026-07-04", time:"TBC",   opp:"TBC",                 oppSeed:null, oppFlag:"", field:"TBC", pool:"Final Placement" },
 ];
 
 const EVENTS = [
@@ -285,9 +288,9 @@ const EVENTS = [
   { date:"2026-06-28", icon:"👕", title:"VC Merch Pickup",       time:"From 08:00", desc:"Pre-order pickup at VC Official Merchandise Tent. Open daily 9:30–17:30 from Sun 28 Jun. Exchange sizes while stock lasts. <a href=\"https://maps.app.goo.gl/x3QH2vKikJhFUqaN6\" target=\"_blank\" style=\"color:var(--accent);font-weight:600;\">Map →</a>" },
   { date:"2026-06-27", icon:"🕊", title:"Spirit Captains' Meeting", time:"19:00 – 20:30", desc:"Lecture Theatre B63, Law & Social Sciences Building, University of Nottingham · <a href=\"https://www.google.com/maps/search/?api=1&query=Law+and+Social+Sciences+Building+University+of+Nottingham\" target=\"_blank\" style=\"color:var(--accent);font-weight:600;\">Map →</a>" },
   { date:"2026-06-27", icon:"🏅", title:"Captains' Meeting",    time:"19:00 – 20:30", desc:"Lecture Theatre B62, Law & Social Sciences Building, University of Nottingham · <a href=\"https://www.google.com/maps/search/?api=1&query=Law+and+Social+Sciences+Building+University+of+Nottingham\" target=\"_blank\" style=\"color:var(--accent);font-weight:600;\">Map →</a>" },
-  { date:"2026-07-01", icon:"🤝", title:"Trade Night",          time:"Evening", desc:"Swap kit & swag with players from around the world." },
   { date:"2026-07-03", icon:"🎧", title:"WMUCC Official Party",  time:"21:30 – 02:00", desc:"Tournament Village. Live music + DJ Bradley James + DJ Tom Styles. Bring ID & accreditation." },
   { date:"2026-07-04", icon:"🏆", title:"Finals Day",           time:"All day", desc:"Medal games at Highfields. Trading continues — bring your swag!" },
+  { date:"2026-07-04", icon:"🤝", title:"Trade Night",          time:"Evening", desc:"Swap kit & swag at Highfields. <a href=\"https://maps.app.goo.gl/x3QH2vKikJhFUqaN6\" target=\"_blank\" style=\"color:var(--accent);font-weight:600;\">Map →</a>" },
 ];
 
 // ponytail: sort by date+time so each day displays in chronological order
